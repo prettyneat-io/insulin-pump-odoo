@@ -7,3 +7,4 @@ access_consumables_allocation_admin,glucose.consumables.allocation.admin,model_g
 access_consumables_allocation_user,glucose.consumables.allocation.user,model_glucose_consumables_allocation,base.group_user,1,0,0,0
 access_holiday_pump_request_admin,glucose.holiday.pump.request.admin,model_glucose_holiday_pump_request,group_patient_administrators,1,1,1,1
 access_holiday_pump_request_user,glucose.holiday.pump.request.user,model_glucose_holiday_pump_request,base.group_user,1,0,0,0
+access_replace_device_wizard_admin,glucose.replace.device.wizard.admin,model_glucose_replace_device_wizard,group_patient_administrators,1,1,1,1

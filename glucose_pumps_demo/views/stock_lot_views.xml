@@ -11,13 +11,27 @@
                     <group>
                         <field name="is_glucose_pump" invisible="1"/>
                         <field name="is_rma_device" readonly="1"/>
-                        <field name="pump_state" widget="badge" decoration-success="pump_state == 'available'" decoration-warning="pump_state == 'assigned'" decoration-danger="pump_state == 'scrapped'"/>
+                        <field name="pump_state"/>
                         <field name="assignment_type" invisible="pump_state != 'assigned'"/>
                     </group>
                     <group>
                         <field name="assigned_patient_id" invisible="pump_state != 'assigned'" options="{'no_create': True}"/>
                     </group>
                 </group>
+                <!-- Linked Patient Information Tab -->
+                <notebook invisible="not is_glucose_pump">
+                    <page string="Linked Patient Information" name="linked_patient_info">
+                        <field name="assignment_log_ids" readonly="1">
+                            <list>
+                                <field name="patient_internal_id" string="Patient ID"/>
+                                <field name="patient_id" string="Patient Name"/>
+                                <field name="assignment_type"/>
+                                <field name="installation_date"/>
+                                <field name="replacement_date"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
             </xpath>
         </field>
     </record>
@@ -28,13 +42,50 @@
         <field name="model">stock.lot</field>
         <field name="arch" type="xml">
             <list string="Glucose Pump Equipment">
-                <field name="name" string="Serial Number"/>
+                <field name="patient_internal_id"/>
+                <field name="assigned_patient_id" string="Patient Name"/>
+                <field name="name" string="Equipment SN"/>
                 <field name="product_id"/>
-                <field name="is_rma_device"/>
+                <field name="is_rma_device" optional="hide"/>
                 <field name="pump_state" widget="badge" decoration-success="pump_state == 'available'" decoration-warning="pump_state == 'assigned'" decoration-danger="pump_state == 'scrapped'"/>
                 <field name="assignment_type"/>
-                <field name="assigned_patient_id"/>
+                <field name="installation_date"/>
+                <field name="activity_ids" widget="list_activity"/>
             </list>
+        </field>
+    </record>
+
+    <!-- Glucose Pump Equipment Kanban View (Dashboard) -->
+    <record id="view_stock_lot_kanban_glucose_pumps" model="ir.ui.view">
+        <field name="name">stock.lot.kanban.glucose.pumps</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="pump_state" class="o_kanban_dashboard">
+                <field name="pump_state"/>
+                <field name="name"/>
+                <field name="assigned_patient_id"/>
+                <field name="assignment_type"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div>
+                                    <field name="assigned_patient_id"/>
+                                </div>
+                                <div>
+                                    <field name="assignment_type"/>
+                                </div>
+                                <div class="mt-2">
+                                    <field name="pump_state" widget="badge" decoration-success="pump_state == 'available'" decoration-warning="pump_state == 'assigned'" decoration-danger="pump_state == 'scrapped'"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 
@@ -67,10 +118,11 @@
     <record id="action_glucose_pump_equipment" model="ir.actions.act_window">
         <field name="name">Equipment</field>
         <field name="res_model">stock.lot</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="domain">[('is_glucose_pump', '=', True)]</field>
-        <field name="context">{}</field>
+        <field name="context">{'search_default_group_state': 1}</field>
         <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_stock_lot_kanban_glucose_pumps')}),
             (0, 0, {'view_mode': 'list', 'view_id': ref('view_stock_lot_tree_glucose_pumps')})]"/>
         <field name="search_view_id" ref="view_stock_lot_search_glucose_pumps"/>
         <field name="help" type="html">
@@ -80,6 +132,41 @@
             <p>
                 Equipment is created by adding serial numbers to glucose pump products in inventory.
             </p>
+        </field>
+    </record>
+
+    <!-- Server Actions for Equipment -->
+    <record id="action_unassign_device_server" model="ir.actions.server">
+        <field name="name">Unassign Device</field>
+        <field name="model_id" ref="stock.model_stock_lot"/>
+        <field name="binding_model_id" ref="stock.model_stock_lot"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_unassign_device()
+        </field>
+    </record>
+
+    <record id="action_replace_device_server" model="ir.actions.server">
+        <field name="name">Replace Device</field>
+        <field name="model_id" ref="stock.model_stock_lot"/>
+        <field name="binding_model_id" ref="stock.model_stock_lot"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+            if len(records) == 1:
+                action = records.action_replace_device_wizard()
+        </field>
+    </record>
+
+    <record id="action_scrap_device_server" model="ir.actions.server">
+        <field name="name">Scrap Device</field>
+        <field name="model_id" ref="stock.model_stock_lot"/>
+        <field name="binding_model_id" ref="stock.model_stock_lot"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_scrap_device()
         </field>
     </record>
 

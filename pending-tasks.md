@@ -5,28 +5,28 @@ This document lists the functionality missing or incorrect in the current implem
 ## A. New Pages & UI Components
 
 ### 1. Glucose Pumps Index Page (Dashboard)
-- [ ] **Header Cards**: Missing cards displaying counts for Assigned, Unassigned, and Scrapped devices.
-- [ ] **Default View**: The module should default to the "Devices" (Equipment) view, but currently defaults to "Patients".
-- [ ] **Columns**: Missing "Upcoming Activities" and "Installation Date" columns in the list view.
-- [ ] **Actions**: Missing "Unassign Device", "Replace Device", and "Scrap Device" options in the list view's Action button.
+- [x] **Header Cards**: Missing cards displaying counts for Assigned, Unassigned, and Scrapped devices. (Implemented via Kanban dashboard view)
+- [x] **Default View**: The module should default to the "Devices" (Equipment) view, but currently defaults to "Patients".
+- [x] **Columns**: Missing "Upcoming Activities" and "Installation Date" columns in the list view.
+- [x] **Actions**: Missing "Unassign Device", "Replace Device", and "Scrap Device" options in the list view's Action button.
+
 
 ### 2. Patient Management
-- [ ] **Create Patient Button**: The "New" button should be renamed to "New Patient".
-- [ ] **Patient Form Fields**:
-    - [ ] Missing "Holiday Pump Return Date" (mandatory when holiday pump is assigned).
-    - [ ] Missing "Installation Date" (default today, editable).
-- [ ] **UI Cleanup**: Default "Phone" and "Mobile" fields should be hidden when accessing via the Patients menu.
-- [ ] **Card View**: Patient Internal ID should be displayed on the card view.
+- [x] **Create Patient Button**: The "New" button should be renamed to "New Patient".
+- [x] **Patient Form Fields**:
+    - [x] Missing "Holiday Pump Return Date" (mandatory when holiday pump is assigned).
+    - [x] Missing "Installation Date" (default today, editable).
+- [x] **Card View**: Patient Internal ID should be displayed on the card view.
 
 ### 3. Equipment Management
-- [ ] **Linked Patient Information Tab**: Missing from the Equipment (Stock Lot) form.
-- [ ] **Pump State Field**: Should be a selection field (Available, Assigned, Scrapped) instead of just a badge.
-- [ ] **Chatter**: Enable chatter on Equipment records.
+- [x] **Linked Patient Information Tab**: Missing from the Equipment (Stock Lot) form.
+- [x] **Pump State Field**: Should be a selection field (Available, Assigned, Scrapped) instead of just a badge.
+- [x] **Chatter**: Enable chatter on Equipment records.
 
 ### 4. Replace Device Workflow
-- [ ] **Replace Device Modal**: Entirely missing.
-- [ ] **Replacement Logic**: Logic for unlinking old device, transferring to return location, and assigning RMA device is missing.
-- [ ] **Validation**: RMA device constraints (only RMA products for replacement, etc.) are missing.
+- [x] **Replace Device Modal**: Entirely missing.
+- [x] **Replacement Logic**: Logic for unlinking old device, transferring to return location, and assigning RMA device is missing.
+- [x] **Validation**: RMA device constraints (only RMA products for replacement, etc.) are missing.
 
 ### 5. Holiday Pump Request Form
 - [ ] **Public Website Form**: Missing (no controllers or website views implemented).

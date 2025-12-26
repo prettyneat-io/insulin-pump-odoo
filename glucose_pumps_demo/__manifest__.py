@@ -33,6 +33,7 @@
         'data/res_config_settings_data.xml',
         'views/res_partner_views.xml',
         'views/stock_lot_views.xml',
+        'views/replace_device_wizard_views.xml',
         'views/glucose_pumps_views.xml',
         'data/ir_sequence_data.xml',
         'data/training_location_data.xml',

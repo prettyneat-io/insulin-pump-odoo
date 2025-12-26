@@ -32,8 +32,7 @@ services:
       PASSWORD: ${POSTGRES_PASSWORD}
       DATABASE: ${POSTGRES_DB}
       ADMIN_PASSWORD: ${ODOO_ADMIN_PASSWORD}
-    command: >
-      odoo -i ${INSTALL_ADDONS:-base} -d ${POSTGRES_DB} --without-demo=all
+    command: odoo
     volumes:
       - odoo-data:/var/lib/odoo
       - ./odoo.conf:/etc/odoo/odoo.conf:ro

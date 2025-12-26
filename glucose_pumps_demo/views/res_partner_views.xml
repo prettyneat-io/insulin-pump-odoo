@@ -21,6 +21,7 @@
                             <field name="patient_date_of_birth"/>
                             <field name="patient_phone"/>
                             <field name="patient_locality"/>
+                            <field name="installation_date"/>
                         </group>
                         <group string="Training">
                             <field name="training_location_id"/>
@@ -30,6 +31,7 @@
                         <group string="Assigned Devices">
                             <field name="primary_device_id" options="{'no_create': True}"/>
                             <field name="holiday_pump_id" options="{'no_create': True}"/>
+                            <field name="holiday_pump_return_date" required="holiday_pump_id"/>
                         </group>
                     </group>
                 </page>
@@ -52,6 +54,66 @@
                 <field name="patient_phone"/>
                 <field name="email"/>
             </list>
+        </field>
+    </record>
+
+    <!-- Patient kanban view -->
+    <record id="view_partner_kanban_patients" model="ir.ui.view">
+        <field name="name">res.partner.kanban.patients</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <kanban class="o_res_partner_kanban" sample="1" create_label="New Patient">
+                <field name="id"/>
+                <field name="color"/>
+                <field name="display_name"/>
+                <field name="title"/>
+                <field name="email"/>
+                <field name="parent_id"/>
+                <field name="is_company"/>
+                <field name="function"/>
+                <field name="phone"/>
+                <field name="street"/>
+                <field name="street2"/>
+                <field name="zip"/>
+                <field name="city"/>
+                <field name="country_id"/>
+                <field name="mobile"/>
+                <field name="state_id"/>
+                <field name="category_id"/>
+                <field name="avatar_128"/>
+                <field name="type"/>
+                <field name="patient_internal_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                            <field name="avatar_128" widget="image" class="o_kanban_image_fill_left" options="{'zoom': true, 'zoom_delay': 1000, 'background': true, 'prevent_pause': true}"/>
+                            <div class="oe_kanban_details d-flex flex-column justify-content-between">
+                                <div>
+                                    <strong class="o_kanban_record_title oe_partner_heading"><field name="display_name"/></strong>
+                                    <div class="o_kanban_tags_section oe_kanban_partner_categories"/>
+                                    <ul>
+                                        <li t-if="record.patient_internal_id.raw_value" class="text-primary fw-bold"><field name="patient_internal_id"/></li>
+                                        <li t-if="record.parent_id.raw_value and !record.function.raw_value"><field name="parent_id"/></li>
+                                        <li t-if="!record.parent_id.raw_value and record.function.raw_value"><field name="function"/></li>
+                                        <li t-if="record.parent_id.raw_value and record.function.raw_value"><field name="function"/> at <field name="parent_id"/></li>
+                                        <li t-if="record.city.raw_value or record.country_id.raw_value">
+                                            <t t-if="record.city.raw_value"><field name="city"/><t t-if="record.country_id.raw_value">, </t></t>
+                                            <t t-if="record.country_id.raw_value"><field name="country_id"/></t>
+                                        </li>
+                                        <li t-if="record.email.raw_value" class="o_text_overflow"><field name="email"/></li>
+                                    </ul>
+                                </div>
+                                <div class="oe_kanban_footer">
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left"/>
+                                        <div class="oe_kanban_bottom_right"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 
@@ -79,11 +141,12 @@
     <record id="action_patients" model="ir.actions.act_window">
         <field name="name">Patients</field>
         <field name="res_model">res.partner</field>
-        <field name="view_mode">list,form,kanban</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="domain">[('is_patient', '=', True)]</field>
         <field name="context">{'default_is_patient': True}</field>
         <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'list', 'view_id': ref('view_partner_tree_patients')})]"/>
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_partner_tree_patients')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_partner_kanban_patients')})]"/>
         <field name="search_view_id" ref="view_partner_search_patients"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
