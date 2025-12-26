@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Training Locations -->
+        <record id="training_location_mater_dei" model="glucose.training.location">
+            <field name="name">Mater Dei Hospital</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="training_location_gozo" model="glucose.training.location">
+            <field name="name">Gozo General Hospital</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="training_location_st_james" model="glucose.training.location">
+            <field name="name">St. James Hospital</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="training_location_evercare_clinic" model="glucose.training.location">
+            <field name="name">Evercare Medical Clinic</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="training_location_paola_health" model="glucose.training.location">
+            <field name="name">Paola Health Centre</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

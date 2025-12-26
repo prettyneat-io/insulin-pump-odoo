@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Consumables Allocation for Patient 1: Maria Borg -->
+        <record id="consumables_maria_oct_2024" model="glucose.consumables.allocation">
+            <field name="patient_id" ref="patient_maria_borg"/>
+            <field name="month">10</field>
+            <field name="year">2024</field>
+            <field name="quantity_allocated">10</field>
+            <field name="quantity_used">8</field>
+            <field name="threshold">13</field>
+        </record>
+
+        <record id="consumables_maria_nov_2024" model="glucose.consumables.allocation">
+            <field name="patient_id" ref="patient_maria_borg"/>
+            <field name="month">11</field>
+            <field name="year">2024</field>
+            <field name="quantity_allocated">10</field>
+            <field name="quantity_used">10</field>
+            <field name="threshold">13</field>
+        </record>
+
+        <record id="consumables_maria_dec_2024" model="glucose.consumables.allocation">
+            <field name="patient_id" ref="patient_maria_borg"/>
+            <field name="month">12</field>
+            <field name="year">2024</field>
+            <field name="quantity_allocated">12</field>
+            <field name="quantity_used">11</field>
+            <field name="threshold">13</field>
+        </record>
+
+        <!-- Consumables Allocation for Patient 2: Joseph Camilleri -->
+        <record id="consumables_joseph_oct_2024" model="glucose.consumables.allocation">
+            <field name="patient_id" ref="patient_joseph_camilleri"/>
+            <field name="month">10</field>
+            <field name="year">2024</field>
+            <field name="quantity_allocated">10</field>
+            <field name="quantity_used">9</field>
+            <field name="threshold">13</field>
+        </record>
+
+        <record id="consumables_joseph_nov_2024" model="glucose.consumables.allocation">
+            <field name="patient_id" ref="patient_joseph_camilleri"/>
+            <field name="month">11</field>
+            <field name="year">2024</field>
+            <field name="quantity_allocated">10</field>
+            <field name="quantity_used">12</field>
+            <field name="threshold">13</field>
+        </record>
+
+        <record id="consumables_joseph_dec_2024" model="glucose.consumables.allocation">
+            <field name="patient_id" ref="patient_joseph_camilleri"/>
+            <field name="month">12</field>
+            <field name="year">2024</field>
+            <field name="quantity_allocated">13</field>
+            <field name="quantity_used">13</field>
+            <field name="threshold">13</field>
+        </record>
+
+        <!-- Consumables Allocation for Patient 3: Carmen Farrugia (exceeded threshold) -->
+        <record id="consumables_carmen_nov_2024" model="glucose.consumables.allocation">
+            <field name="patient_id" ref="patient_carmen_farrugia"/>
+            <field name="month">11</field>
+            <field name="year">2024</field>
+            <field name="quantity_allocated">13</field>
+            <field name="quantity_used">15</field>
+            <field name="threshold">13</field>
+        </record>
+
+        <record id="consumables_carmen_dec_2024" model="glucose.consumables.allocation">
+            <field name="patient_id" ref="patient_carmen_farrugia"/>
+            <field name="month">12</field>
+            <field name="year">2024</field>
+            <field name="quantity_allocated">10</field>
+            <field name="quantity_used">7</field>
+            <field name="threshold">13</field>
+        </record>
+
+        <!-- Consumables Allocation for Patient 4: Paul Vella -->
+        <record id="consumables_paul_dec_2024" model="glucose.consumables.allocation">
+            <field name="patient_id" ref="patient_paul_vella"/>
+            <field name="month">12</field>
+            <field name="year">2024</field>
+            <field name="quantity_allocated">10</field>
+            <field name="quantity_used">5</field>
+            <field name="threshold">13</field>
+        </record>
+    </data>
+</odoo>

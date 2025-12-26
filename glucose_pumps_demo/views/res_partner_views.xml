@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend contact form to add Patient Info tab -->
+    <record id="view_partner_form_patient_info" model="ir.ui.view">
+        <field name="name">res.partner.form.patient.info</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Patient checkbox to the header area -->
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="is_patient" widget="boolean_toggle"/>
+            </xpath>
+            
+            <!-- Add Patient Info tab -->
+            <xpath expr="//page[@name='internal_notes']" position="after">
+                <page string="Patient Info" name="patient_info" invisible="not is_patient">
+                    <group>
+                        <group string="Patient Identification">
+                            <field name="patient_internal_id" readonly="1"/>
+                            <field name="patient_id_number"/>
+                            <field name="patient_date_of_birth"/>
+                            <field name="patient_phone"/>
+                            <field name="patient_locality"/>
+                        </group>
+                        <group string="Training">
+                            <field name="training_location_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Assigned Devices">
+                            <field name="primary_device_id" options="{'no_create': True}"/>
+                            <field name="holiday_pump_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Patient-specific list view -->
+    <record id="view_partner_tree_patients" model="ir.ui.view">
+        <field name="name">res.partner.tree.patients</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list string="Patients">
+                <field name="patient_internal_id"/>
+                <field name="name"/>
+                <field name="patient_date_of_birth"/>
+                <field name="patient_locality"/>
+                <field name="training_location_id"/>
+                <field name="primary_device_id"/>
+                <field name="patient_phone"/>
+                <field name="email"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Patient search view -->
+    <record id="view_partner_search_patients" model="ir.ui.view">
+        <field name="name">res.partner.search.patients</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search string="Search Patients">
+                <field name="name"/>
+                <field name="patient_internal_id"/>
+                <field name="patient_id_number"/>
+                <field name="patient_locality"/>
+                <field name="training_location_id"/>
+                <filter string="Patients Only" name="patients_only" domain="[('is_patient', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Training Location" name="group_training_location" context="{'group_by': 'training_location_id'}"/>
+                    <filter string="Locality" name="group_locality" context="{'group_by': 'patient_locality'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Patient menu action -->
+    <record id="action_patients" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="domain">[('is_patient', '=', True)]</field>
+        <field name="context">{'default_is_patient': True}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_partner_tree_patients')})]"/>
+        <field name="search_view_id" ref="view_partner_search_patients"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first patient!
+            </p>
+            <p>
+                Patients are contacts who are registered to receive glucose pump equipment.
+            </p>
+        </field>
+    </record>
+
+    <!-- Add Patients menu item -->
+    <menuitem id="menu_glucose_pumps_root"
+        name="Glucose Pumps"
+        sequence="50"/>
+    
+    <menuitem id="menu_patients"
+        name="Patients"
+        parent="menu_glucose_pumps_root"
+        action="action_patients"
+        sequence="20"/>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequence for Holiday Pump Requests -->
+        <record id="sequence_holiday_pump_request" model="ir.sequence">
+            <field name="name">Holiday Pump Request</field>
+            <field name="code">glucose.holiday.pump.request</field>
+            <field name="prefix">HPR-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+    </data>
+</odoo>

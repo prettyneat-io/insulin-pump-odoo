@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_training_location_admin,glucose.training.location.admin,model_glucose_training_location,group_patient_administrators,1,1,1,1
+access_training_location_user,glucose.training.location.user,model_glucose_training_location,base.group_user,1,0,0,0
+access_assignment_log_admin,glucose.assignment.log.admin,model_glucose_assignment_log,group_patient_administrators,1,1,1,1
+access_assignment_log_user,glucose.assignment.log.user,model_glucose_assignment_log,base.group_user,1,0,0,0
+access_consumables_allocation_admin,glucose.consumables.allocation.admin,model_glucose_consumables_allocation,group_patient_administrators,1,1,1,1
+access_consumables_allocation_user,glucose.consumables.allocation.user,model_glucose_consumables_allocation,base.group_user,1,0,0,0
+access_holiday_pump_request_admin,glucose.holiday.pump.request.admin,model_glucose_holiday_pump_request,group_patient_administrators,1,1,1,1
+access_holiday_pump_request_user,glucose.holiday.pump.request.user,model_glucose_holiday_pump_request,base.group_user,1,0,0,0

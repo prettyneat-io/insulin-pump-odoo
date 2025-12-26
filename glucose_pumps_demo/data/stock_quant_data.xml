@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- 
+            Stock Quants: Place each lot/serial number at the appropriate location with qty=1.
+            - Available devices go to stock_location_available
+            - Assigned devices go to stock_location_assigned
+            - Scrapped devices go to stock.stock_location_scrapped
+            - RMA devices go to stock_location_rma
+        -->
+
+        <!-- Available Tandem t:slim X2 Devices - in Available Devices location -->
+        <record id="quant_tslim_001" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_tslim_001"/>
+            <field name="location_id" ref="stock_location_available"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <record id="quant_tslim_002" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_tslim_002"/>
+            <field name="location_id" ref="stock_location_available"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <record id="quant_tslim_003" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_tslim_003"/>
+            <field name="location_id" ref="stock_location_available"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <record id="quant_tslim_004" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_tslim_004"/>
+            <field name="location_id" ref="stock_location_available"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <record id="quant_tslim_005" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_tslim_005"/>
+            <field name="location_id" ref="stock_location_available"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <!-- Assigned Tandem t:slim X2 Devices - in Assigned to Patients location -->
+        <record id="quant_tslim_100" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_tslim_100"/>
+            <field name="location_id" ref="stock_location_assigned"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <record id="quant_tslim_101" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_tslim_101"/>
+            <field name="location_id" ref="stock_location_assigned"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <record id="quant_tslim_102" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_tslim_102"/>
+            <field name="location_id" ref="stock_location_assigned"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <!-- Holiday Pumps -->
+        <record id="quant_tslim_hp_001" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_tslim_hp_001"/>
+            <field name="location_id" ref="stock_location_assigned"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <record id="quant_tslim_hp_002" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_tslim_hp_002"/>
+            <field name="location_id" ref="stock_location_available"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <!-- RMA Replacement Devices - in RMA Devices location -->
+        <record id="quant_rma_001" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2_rma'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_rma_001"/>
+            <field name="location_id" ref="stock_location_rma"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <record id="quant_rma_002" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2_rma'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_rma_002"/>
+            <field name="location_id" ref="stock_location_rma"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <record id="quant_rma_003" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2_rma'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_rma_003"/>
+            <field name="location_id" ref="stock_location_rma"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <!-- Medtronic Devices -->
+        <record id="quant_mm780g_001" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_medtronic_780g'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_mm780g_001"/>
+            <field name="location_id" ref="stock_location_available"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <record id="quant_mm780g_002" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_medtronic_780g'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_mm780g_002"/>
+            <field name="location_id" ref="stock_location_assigned"/>
+            <field name="quantity">1</field>
+        </record>
+
+        <!-- Scrapped Device - in Scrap location -->
+        <record id="quant_tslim_scrap_001" model="stock.quant" forcecreate="1">
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="lot_id" ref="lot_tslim_scrap_001"/>
+            <field name="location_id" ref="stock_location_scrapped"/>
+            <field name="quantity">1</field>
+        </record>
+    </data>
+</odoo>

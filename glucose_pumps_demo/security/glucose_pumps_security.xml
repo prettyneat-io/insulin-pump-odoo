@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Glucose Pumps Module Category -->
+        <record id="module_category_glucose_pumps" model="ir.module.category">
+            <field name="name">Glucose Pumps</field>
+            <field name="description">Category for Glucose Pump management</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <!-- Patient Administrators Group -->
+        <record id="group_patient_administrators" model="res.groups">
+            <field name="name">Patient Administrators</field>
+            <field name="category_id" ref="module_category_glucose_pumps"/>
+            <field name="comment">
+                Patient Administrators can:
+                - View/Edit Patient App
+                - View/Edit Patient menu in contacts
+                - View/Edit Patient tab in contact card
+                - View Linked Patient Information tab in Equipment
+            </field>
+        </record>
+
+        <!-- Demo Users: Jonathan -->
+        <record id="user_jonathan" model="res.users">
+            <field name="name">Jonathan</field>
+            <field name="login">jonathan@evercaremedical.eu</field>
+            <field name="email">jonathan@evercaremedical.eu</field>
+            <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('group_patient_administrators'))]"/>
+        </record>
+
+        <!-- Demo Users: Denise -->
+        <record id="user_denise" model="res.users">
+            <field name="name">Denise</field>
+            <field name="login">denise@evercaremedical.eu</field>
+            <field name="email">denise@evercaremedical.eu</field>
+            <field name="groups_id" eval="[(4, ref('base.group_user')), (4, ref('group_patient_administrators'))]"/>
+        </record>
+    </data>
+</odoo>

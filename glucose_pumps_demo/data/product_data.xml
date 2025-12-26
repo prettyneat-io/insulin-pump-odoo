@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Product Category for Medical Devices -->
+        <record id="product_category_medical_devices" model="product.category">
+            <field name="name">Medical Devices</field>
+        </record>
+
+        <record id="product_category_glucose_pumps" model="product.category">
+            <field name="name">Glucose Pumps</field>
+            <field name="parent_id" ref="product_category_medical_devices"/>
+        </record>
+
+        <!-- Main Glucose Pump Product: Tandem t:slim X2 -->
+        <record id="product_template_tslim_x2" model="product.template">
+            <field name="name">Tandem t:slim X2 Insulin Pump</field>
+            <field name="type">consu</field>
+            <field name="is_storable">True</field>
+            <field name="tracking">serial</field>
+            <field name="categ_id" ref="product_category_glucose_pumps"/>
+            <field name="is_glucose_pump_product">True</field>
+            <field name="is_rma_product">False</field>
+            <field name="list_price">4500.00</field>
+            <field name="default_code">TSLIM-X2</field>
+            <field name="description">Tandem t:slim X2 Insulin Pump with Control-IQ technology</field>
+        </record>
+
+        <!-- RMA Replacement Product -->
+        <record id="product_template_tslim_x2_rma" model="product.template">
+            <field name="name">Tandem t:slim X2 RMA Replacement</field>
+            <field name="type">consu</field>
+            <field name="is_storable">True</field>
+            <field name="tracking">serial</field>
+            <field name="categ_id" ref="product_category_glucose_pumps"/>
+            <field name="is_glucose_pump_product">True</field>
+            <field name="is_rma_product">True</field>
+            <field name="list_price">0.00</field>
+            <field name="default_code">TSLIM-X2-RMA</field>
+            <field name="description">RMA Replacement unit for Tandem t:slim X2 - Used only for device replacements</field>
+        </record>
+
+        <!-- Alternative Pump Product: Medtronic 780G -->
+        <record id="product_template_medtronic_780g" model="product.template">
+            <field name="name">Medtronic MiniMed 780G</field>
+            <field name="type">consu</field>
+            <field name="is_storable">True</field>
+            <field name="tracking">serial</field>
+            <field name="categ_id" ref="product_category_glucose_pumps"/>
+            <field name="is_glucose_pump_product">True</field>
+            <field name="is_rma_product">False</field>
+            <field name="list_price">5200.00</field>
+            <field name="default_code">MM-780G</field>
+            <field name="description">Medtronic MiniMed 780G Advanced Hybrid Closed-Loop System</field>
+        </record>
+
+        <!-- Consumables Product: Infusion Sets -->
+        <record id="product_template_infusion_set" model="product.template">
+            <field name="name">AutoSoft 90 Infusion Set</field>
+            <field name="type">consu</field>
+            <field name="categ_id" ref="product_category_glucose_pumps"/>
+            <field name="list_price">45.00</field>
+            <field name="default_code">AUTOSOFT-90</field>
+            <field name="description">AutoSoft 90 Infusion Set - Box of 10</field>
+        </record>
+
+        <!-- Consumables Product: Cartridges -->
+        <record id="product_template_cartridge" model="product.template">
+            <field name="name">t:slim Cartridge</field>
+            <field name="type">consu</field>
+            <field name="categ_id" ref="product_category_glucose_pumps"/>
+            <field name="list_price">35.00</field>
+            <field name="default_code">TSLIM-CART</field>
+            <field name="description">t:slim X2 Cartridge - Box of 10</field>
+        </record>
+    </data>
+</odoo>

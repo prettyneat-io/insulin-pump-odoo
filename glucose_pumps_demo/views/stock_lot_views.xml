@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend stock.lot form to show glucose pump fields -->
+    <record id="view_stock_lot_form_glucose_pump" model="ir.ui.view">
+        <field name="name">stock.lot.form.glucose.pump</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='main_group']" position="after">
+                <group string="Glucose Pump Info" invisible="not is_glucose_pump">
+                    <group>
+                        <field name="is_glucose_pump" invisible="1"/>
+                        <field name="is_rma_device" readonly="1"/>
+                        <field name="pump_state" widget="badge" decoration-success="pump_state == 'available'" decoration-warning="pump_state == 'assigned'" decoration-danger="pump_state == 'scrapped'"/>
+                        <field name="assignment_type" invisible="pump_state != 'assigned'"/>
+                    </group>
+                    <group>
+                        <field name="assigned_patient_id" invisible="pump_state != 'assigned'" options="{'no_create': True}"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Glucose Pump Equipment list view -->
+    <record id="view_stock_lot_tree_glucose_pumps" model="ir.ui.view">
+        <field name="name">stock.lot.tree.glucose.pumps</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <list string="Glucose Pump Equipment">
+                <field name="name" string="Serial Number"/>
+                <field name="product_id"/>
+                <field name="is_rma_device"/>
+                <field name="pump_state" widget="badge" decoration-success="pump_state == 'available'" decoration-warning="pump_state == 'assigned'" decoration-danger="pump_state == 'scrapped'"/>
+                <field name="assignment_type"/>
+                <field name="assigned_patient_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Glucose Pump Equipment search view -->
+    <record id="view_stock_lot_search_glucose_pumps" model="ir.ui.view">
+        <field name="name">stock.lot.search.glucose.pumps</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <search string="Search Equipment">
+                <field name="name" string="Serial Number"/>
+                <field name="product_id"/>
+                <field name="assigned_patient_id"/>
+                <filter string="Available" name="filter_available" domain="[('pump_state', '=', 'available')]"/>
+                <filter string="Assigned" name="filter_assigned" domain="[('pump_state', '=', 'assigned')]"/>
+                <filter string="Scrapped" name="filter_scrapped" domain="[('pump_state', '=', 'scrapped')]"/>
+                <separator/>
+                <filter string="Primary Devices" name="filter_primary" domain="[('assignment_type', '=', 'primary')]"/>
+                <filter string="Holiday Pumps" name="filter_holiday" domain="[('assignment_type', '=', 'holiday')]"/>
+                <filter string="RMA Devices" name="filter_rma" domain="[('is_rma_device', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="State" name="group_state" context="{'group_by': 'pump_state'}"/>
+                    <filter string="Assignment Type" name="group_assignment_type" context="{'group_by': 'assignment_type'}"/>
+                    <filter string="Product" name="group_product" context="{'group_by': 'product_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Equipment menu action -->
+    <record id="action_glucose_pump_equipment" model="ir.actions.act_window">
+        <field name="name">Equipment</field>
+        <field name="res_model">stock.lot</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_glucose_pump', '=', True)]</field>
+        <field name="context">{}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_stock_lot_tree_glucose_pumps')})]"/>
+        <field name="search_view_id" ref="view_stock_lot_search_glucose_pumps"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No glucose pump equipment found.
+            </p>
+            <p>
+                Equipment is created by adding serial numbers to glucose pump products in inventory.
+            </p>
+        </field>
+    </record>
+
+    <!-- Add Equipment menu item -->
+    <menuitem id="menu_equipment"
+        name="Equipment"
+        parent="menu_glucose_pumps_root"
+        action="action_glucose_pump_equipment"
+        sequence="10"/>
+</odoo>

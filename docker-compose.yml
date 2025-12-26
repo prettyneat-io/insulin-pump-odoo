@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:15
+    container_name: odoo18-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
+
+  odoo:
+    image: odoo:18.0
+    container_name: odoo18-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8069:8069"
+    environment:
+      HOST: db
+      PORT: 5432
+      USER: ${POSTGRES_USER}
+      PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE: ${POSTGRES_DB}
+      ADMIN_PASSWORD: ${ODOO_ADMIN_PASSWORD}
+    command: >
+      odoo -i ${INSTALL_ADDONS:-base} -d ${POSTGRES_DB} --without-demo=all
+    volumes:
+      - odoo-data:/var/lib/odoo
+      - ./odoo.conf:/etc/odoo/odoo.conf:ro
+      - ./:/mnt/custom_addons:rw
+
+volumes:
+  postgres-data:
+  odoo-data:

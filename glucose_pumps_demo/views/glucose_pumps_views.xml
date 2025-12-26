@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Training Location list view -->
+    <record id="view_training_location_tree" model="ir.ui.view">
+        <field name="name">glucose.training.location.tree</field>
+        <field name="model">glucose.training.location</field>
+        <field name="arch" type="xml">
+            <list string="Training Locations">
+                <field name="name"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Training Location form view -->
+    <record id="view_training_location_form" model="ir.ui.view">
+        <field name="name">glucose.training.location.form</field>
+        <field name="model">glucose.training.location</field>
+        <field name="arch" type="xml">
+            <form string="Training Location">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g., Mater Dei Hospital"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="active"/>
+                    </group>
+                    <notebook>
+                        <page string="Patients" name="patients">
+                            <field name="patient_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="patient_internal_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Training Location action -->
+    <record id="action_training_locations" model="ir.actions.act_window">
+        <field name="name">Training Locations</field>
+        <field name="res_model">glucose.training.location</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a training location
+            </p>
+        </field>
+    </record>
+
+    <!-- Assignment Log list view -->
+    <record id="view_assignment_log_tree" model="ir.ui.view">
+        <field name="name">glucose.assignment.log.tree</field>
+        <field name="model">glucose.assignment.log</field>
+        <field name="arch" type="xml">
+            <list string="Assignment Logs">
+                <field name="installation_date"/>
+                <field name="patient_id"/>
+                <field name="patient_internal_id"/>
+                <field name="equipment_id"/>
+                <field name="equipment_serial"/>
+                <field name="assignment_type" widget="badge"/>
+                <field name="replacement_date"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Assignment Log form view -->
+    <record id="view_assignment_log_form" model="ir.ui.view">
+        <field name="name">glucose.assignment.log.form</field>
+        <field name="model">glucose.assignment.log</field>
+        <field name="arch" type="xml">
+            <form string="Assignment Log">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="patient_internal_id"/>
+                            <field name="equipment_id"/>
+                            <field name="equipment_serial"/>
+                        </group>
+                        <group>
+                            <field name="assignment_type"/>
+                            <field name="installation_date"/>
+                            <field name="replacement_date"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Assignment Log action -->
+    <record id="action_assignment_logs" model="ir.actions.act_window">
+        <field name="name">Assignment History</field>
+        <field name="res_model">glucose.assignment.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Consumables Allocation list view -->
+    <record id="view_consumables_allocation_tree" model="ir.ui.view">
+        <field name="name">glucose.consumables.allocation.tree</field>
+        <field name="model">glucose.consumables.allocation</field>
+        <field name="arch" type="xml">
+            <list string="Consumables Allocations">
+                <field name="patient_id"/>
+                <field name="patient_internal_id"/>
+                <field name="month"/>
+                <field name="year"/>
+                <field name="quantity_allocated"/>
+                <field name="quantity_used"/>
+                <field name="threshold_status" widget="badge" 
+                    decoration-success="threshold_status == 'green'" 
+                    decoration-warning="threshold_status == 'orange'" 
+                    decoration-danger="threshold_status == 'red'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Consumables Allocation form view -->
+    <record id="view_consumables_allocation_form" model="ir.ui.view">
+        <field name="name">glucose.consumables.allocation.form</field>
+        <field name="model">glucose.consumables.allocation</field>
+        <field name="arch" type="xml">
+            <form string="Consumables Allocation">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="patient_internal_id"/>
+                        </group>
+                        <group>
+                            <field name="month"/>
+                            <field name="year"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="quantity_allocated"/>
+                            <field name="quantity_used"/>
+                        </group>
+                        <group>
+                            <field name="threshold"/>
+                            <field name="threshold_status" widget="badge"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Consumables Allocation action -->
+    <record id="action_consumables_allocations" model="ir.actions.act_window">
+        <field name="name">Consumables Allocations</field>
+        <field name="res_model">glucose.consumables.allocation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Holiday Pump Request list view -->
+    <record id="view_holiday_pump_request_tree" model="ir.ui.view">
+        <field name="name">glucose.holiday.pump.request.tree</field>
+        <field name="model">glucose.holiday.pump.request</field>
+        <field name="arch" type="xml">
+            <list string="Holiday Pump Requests">
+                <field name="name"/>
+                <field name="patient_name"/>
+                <field name="main_pump_serial"/>
+                <field name="contact_phone"/>
+                <field name="travel_start_date"/>
+                <field name="travel_end_date"/>
+                <field name="destination"/>
+                <field name="status" widget="badge" 
+                    decoration-info="status == 'pending'" 
+                    decoration-success="status == 'approved'" 
+                    decoration-danger="status == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Holiday Pump Request form view -->
+    <record id="view_holiday_pump_request_form" model="ir.ui.view">
+        <field name="name">glucose.holiday.pump.request.form</field>
+        <field name="model">glucose.holiday.pump.request</field>
+        <field name="arch" type="xml">
+            <form string="Holiday Pump Request">
+                <header>
+                    <field name="status" widget="statusbar" statusbar_visible="pending,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Patient Information">
+                            <field name="patient_name"/>
+                            <field name="main_pump_serial"/>
+                            <field name="contact_phone"/>
+                            <field name="contact_email"/>
+                            <field name="patient_id"/>
+                            <field name="patient_internal_id"/>
+                        </group>
+                        <group string="Travel Information">
+                            <field name="travel_start_date"/>
+                            <field name="travel_end_date"/>
+                            <field name="destination"/>
+                            <field name="submitted_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason"/>
+                        <field name="additional_notes"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Holiday Pump Request action -->
+    <record id="action_holiday_pump_requests" model="ir.actions.act_window">
+        <field name="name">Holiday Pump Requests</field>
+        <field name="res_model">glucose.holiday.pump.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Submenus for configuration and operations -->
+    <menuitem id="menu_operations"
+        name="Operations"
+        parent="menu_glucose_pumps_root"
+        sequence="30"/>
+    
+    <menuitem id="menu_consumables_allocations"
+        name="Consumables"
+        parent="menu_operations"
+        action="action_consumables_allocations"
+        sequence="10"/>
+    
+    <menuitem id="menu_assignment_history"
+        name="Assignment History"
+        parent="menu_operations"
+        action="action_assignment_logs"
+        sequence="20"/>
+    
+    <menuitem id="menu_holiday_pump_requests"
+        name="Holiday Pump Requests"
+        parent="menu_operations"
+        action="action_holiday_pump_requests"
+        sequence="30"/>
+
+    <menuitem id="menu_configuration"
+        name="Configuration"
+        parent="menu_glucose_pumps_root"
+        sequence="100"/>
+    
+    <menuitem id="menu_training_locations"
+        name="Training Locations"
+        parent="menu_configuration"
+        action="action_training_locations"
+        sequence="10"/>
+</odoo>

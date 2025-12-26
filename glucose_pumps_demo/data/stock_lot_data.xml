@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- 
+            Get product.product references from templates.
+            In Odoo, product.template with single variant creates product.product automatically.
+            We use search to find the product.product by template.
+        -->
+        
+        <!-- Available Tandem t:slim X2 Devices -->
+        <record id="lot_tslim_001" model="stock.lot">
+            <field name="name">TSX2-2024-001</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">available</field>
+        </record>
+
+        <record id="lot_tslim_002" model="stock.lot">
+            <field name="name">TSX2-2024-002</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">available</field>
+        </record>
+
+        <record id="lot_tslim_003" model="stock.lot">
+            <field name="name">TSX2-2024-003</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">available</field>
+        </record>
+
+        <record id="lot_tslim_004" model="stock.lot">
+            <field name="name">TSX2-2024-004</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">available</field>
+        </record>
+
+        <record id="lot_tslim_005" model="stock.lot">
+            <field name="name">TSX2-2024-005</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">available</field>
+        </record>
+
+        <!-- Assigned Tandem t:slim X2 Devices (will be linked to patients) -->
+        <record id="lot_tslim_100" model="stock.lot">
+            <field name="name">TSX2-2023-100</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">assigned</field>
+            <field name="assignment_type">primary</field>
+        </record>
+
+        <record id="lot_tslim_101" model="stock.lot">
+            <field name="name">TSX2-2023-101</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">assigned</field>
+            <field name="assignment_type">primary</field>
+        </record>
+
+        <record id="lot_tslim_102" model="stock.lot">
+            <field name="name">TSX2-2023-102</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">assigned</field>
+            <field name="assignment_type">primary</field>
+        </record>
+
+        <!-- Holiday Pumps (assigned as backup) -->
+        <record id="lot_tslim_hp_001" model="stock.lot">
+            <field name="name">TSX2-HP-001</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">assigned</field>
+            <field name="assignment_type">holiday_pump</field>
+        </record>
+
+        <record id="lot_tslim_hp_002" model="stock.lot">
+            <field name="name">TSX2-HP-002</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">available</field>
+        </record>
+
+        <!-- RMA Replacement Devices -->
+        <record id="lot_rma_001" model="stock.lot">
+            <field name="name">TSX2-RMA-001</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2_rma'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">available</field>
+        </record>
+
+        <record id="lot_rma_002" model="stock.lot">
+            <field name="name">TSX2-RMA-002</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2_rma'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">available</field>
+        </record>
+
+        <record id="lot_rma_003" model="stock.lot">
+            <field name="name">TSX2-RMA-003</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2_rma'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">available</field>
+        </record>
+
+        <!-- Medtronic Devices -->
+        <record id="lot_mm780g_001" model="stock.lot">
+            <field name="name">MM780G-2024-001</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_medtronic_780g'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">available</field>
+        </record>
+
+        <record id="lot_mm780g_002" model="stock.lot">
+            <field name="name">MM780G-2024-002</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_medtronic_780g'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">assigned</field>
+            <field name="assignment_type">primary</field>
+        </record>
+
+        <!-- Scrapped Device (for testing scrapped state) -->
+        <record id="lot_tslim_scrap_001" model="stock.lot">
+            <field name="name">TSX2-2022-OLD</field>
+            <field name="product_id" search="[('product_tmpl_id', '=', ref('product_template_tslim_x2'))]" model="product.product"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="pump_state">scrapped</field>
+        </record>
+    </data>
+</odoo>

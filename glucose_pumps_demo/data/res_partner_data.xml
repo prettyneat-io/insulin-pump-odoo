@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Demo Patients -->
+        
+        <!-- Patient 1: Maria Borg -->
+        <record id="patient_maria_borg" model="res.partner">
+            <field name="name">Maria Borg</field>
+            <field name="is_patient">True</field>
+            <field name="is_company">False</field>
+            <field name="patient_internal_id">2024-001</field>
+            <field name="patient_date_of_birth">1985-03-15</field>
+            <field name="patient_id_number">123456M</field>
+            <field name="patient_phone">+356 9912 3456</field>
+            <field name="patient_locality">Mosta</field>
+            <field name="email">maria.borg@example.com</field>
+            <field name="training_location_id" ref="training_location_mater_dei"/>
+            <field name="primary_device_id" ref="lot_tslim_100"/>
+            <field name="holiday_pump_id" ref="lot_tslim_hp_001"/>
+            <field name="holiday_pump_return_date">2025-01-15</field>
+        </record>
+
+        <!-- Patient 2: Joseph Camilleri -->
+        <record id="patient_joseph_camilleri" model="res.partner">
+            <field name="name">Joseph Camilleri</field>
+            <field name="is_patient">True</field>
+            <field name="is_company">False</field>
+            <field name="patient_internal_id">2024-002</field>
+            <field name="patient_date_of_birth">1978-07-22</field>
+            <field name="patient_id_number">789012M</field>
+            <field name="patient_phone">+356 9923 4567</field>
+            <field name="patient_locality">Valletta</field>
+            <field name="email">joseph.camilleri@example.com</field>
+            <field name="training_location_id" ref="training_location_evercare_clinic"/>
+            <field name="primary_device_id" ref="lot_tslim_101"/>
+        </record>
+
+        <!-- Patient 3: Carmen Farrugia -->
+        <record id="patient_carmen_farrugia" model="res.partner">
+            <field name="name">Carmen Farrugia</field>
+            <field name="is_patient">True</field>
+            <field name="is_company">False</field>
+            <field name="patient_internal_id">2024-003</field>
+            <field name="patient_date_of_birth">1992-11-08</field>
+            <field name="patient_id_number">345678M</field>
+            <field name="patient_phone">+356 9934 5678</field>
+            <field name="patient_locality">Sliema</field>
+            <field name="email">carmen.farrugia@example.com</field>
+            <field name="training_location_id" ref="training_location_st_james"/>
+            <field name="primary_device_id" ref="lot_tslim_102"/>
+        </record>
+
+        <!-- Patient 4: Paul Vella (with Medtronic device) -->
+        <record id="patient_paul_vella" model="res.partner">
+            <field name="name">Paul Vella</field>
+            <field name="is_patient">True</field>
+            <field name="is_company">False</field>
+            <field name="patient_internal_id">2024-004</field>
+            <field name="patient_date_of_birth">1965-05-30</field>
+            <field name="patient_id_number">901234M</field>
+            <field name="patient_phone">+356 9945 6789</field>
+            <field name="patient_locality">Rabat</field>
+            <field name="email">paul.vella@example.com</field>
+            <field name="training_location_id" ref="training_location_gozo"/>
+            <field name="primary_device_id" ref="lot_mm780g_002"/>
+        </record>
+
+        <!-- Patient 5: Anna Grech (no device yet - for testing assignment) -->
+        <record id="patient_anna_grech" model="res.partner">
+            <field name="name">Anna Grech</field>
+            <field name="is_patient">True</field>
+            <field name="is_company">False</field>
+            <field name="patient_internal_id">2025-001</field>
+            <field name="patient_date_of_birth">2000-01-20</field>
+            <field name="patient_id_number">567890M</field>
+            <field name="patient_phone">+356 9956 7890</field>
+            <field name="patient_locality">Birkirkara</field>
+            <field name="email">anna.grech@example.com</field>
+            <field name="training_location_id" ref="training_location_paola_health"/>
+        </record>
+
+        <!-- Update stock.lot records with patient assignments -->
+        <record id="lot_tslim_100" model="stock.lot">
+            <field name="assigned_patient_id" ref="patient_maria_borg"/>
+        </record>
+
+        <record id="lot_tslim_101" model="stock.lot">
+            <field name="assigned_patient_id" ref="patient_joseph_camilleri"/>
+        </record>
+
+        <record id="lot_tslim_102" model="stock.lot">
+            <field name="assigned_patient_id" ref="patient_carmen_farrugia"/>
+        </record>
+
+        <record id="lot_tslim_hp_001" model="stock.lot">
+            <field name="assigned_patient_id" ref="patient_maria_borg"/>
+        </record>
+
+        <record id="lot_mm780g_002" model="stock.lot">
+            <field name="assigned_patient_id" ref="patient_paul_vella"/>
+        </record>
+    </data>
+</odoo>
