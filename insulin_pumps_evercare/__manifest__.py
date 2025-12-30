@@ -1,9 +1,9 @@
 {
-    'name': 'Glucose Pumps Evercare',
+    'name': 'Insulin Pumps Evercare',
     'version': '1.0',
     'category': 'Healthcare',
-    'summary': 'Track glucose pump devices and patient assignments',
-    'description': 'Track glucose pump devices and patient assignments',
+    'summary': 'Track insulin pump devices and patient assignments',
+    'description': 'Track insulin pump devices and patient assignments',
     'author': 'Pretty Neat Software Ltd',
     'website': 'https://www.prettyneat.io',
     'license': 'Other proprietary',
