@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Link devices to patients (bidirectional) -->
+        
+        <!-- Maria Borg - Primary and Holiday Pump -->
+        <record id="patient_maria_borg" model="res.partner">
+            <field name="primary_device_id" ref="lot_tslim_100"/>
+            <field name="holiday_pump_id" ref="lot_tslim_hp_001"/>
+            <field name="holiday_pump_return_date">2025-01-15</field>
+        </record>
+        <record id="lot_tslim_100" model="stock.lot">
+            <field name="assigned_patient_id" ref="patient_maria_borg"/>
+        </record>
+        <record id="lot_tslim_hp_001" model="stock.lot">
+            <field name="assigned_patient_id" ref="patient_maria_borg"/>
+        </record>
+
+        <!-- Joseph Camilleri - Primary -->
+        <record id="patient_joseph_camilleri" model="res.partner">
+            <field name="primary_device_id" ref="lot_tslim_101"/>
+        </record>
+        <record id="lot_tslim_101" model="stock.lot">
+            <field name="assigned_patient_id" ref="patient_joseph_camilleri"/>
+        </record>
+
+        <!-- Carmen Farrugia - Primary -->
+        <record id="patient_carmen_farrugia" model="res.partner">
+            <field name="primary_device_id" ref="lot_tslim_102"/>
+        </record>
+        <record id="lot_tslim_102" model="stock.lot">
+            <field name="assigned_patient_id" ref="patient_carmen_farrugia"/>
+        </record>
+
+        <!-- Paul Vella - Primary (Medtronic) -->
+        <record id="patient_paul_vella" model="res.partner">
+            <field name="primary_device_id" ref="lot_mm780g_002"/>
+        </record>
+        <record id="lot_mm780g_002" model="stock.lot">
+            <field name="assigned_patient_id" ref="patient_paul_vella"/>
+        </record>
+    </data>
+</odoo>

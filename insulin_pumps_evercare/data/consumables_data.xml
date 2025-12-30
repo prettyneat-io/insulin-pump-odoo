@@ -52,8 +52,8 @@
             <field name="patient_id" ref="patient_joseph_camilleri"/>
             <field name="month">12</field>
             <field name="year">2024</field>
-            <field name="quantity_allocated">13</field>
-            <field name="quantity_used">13</field>
+            <field name="quantity_allocated">12</field>
+            <field name="quantity_used">12</field>
             <field name="threshold">13</field>
         </record>
 
@@ -62,7 +62,7 @@
             <field name="patient_id" ref="patient_carmen_farrugia"/>
             <field name="month">11</field>
             <field name="year">2024</field>
-            <field name="quantity_allocated">13</field>
+            <field name="quantity_allocated">12</field>
             <field name="quantity_used">15</field>
             <field name="threshold">13</field>
         </record>
