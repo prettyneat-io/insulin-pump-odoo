@@ -4,6 +4,10 @@
     'category': 'Healthcare',
     'summary': 'Track glucose pump devices and patient assignments',
     'description': 'Track glucose pump devices and patient assignments',
+    'author': 'Pretty Neat Software Ltd',
+    'website': 'https://www.prettyneat.io',
+    'license': 'Other proprietary',
+    'development_status': 'Production/Stable',
     'depends': ['base', 'stock', 'website', 'mail'],
     'data': [
         'security/glucose_pumps_security.xml',
@@ -27,5 +31,4 @@
     ],
     'installable': True,
     'application': True,
-    'license': 'LGPL-3',
 }

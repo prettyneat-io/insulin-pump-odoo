@@ -1,0 +1,24 @@
+Single-Instance License
+
+1. Grant of License
+The Licensor grants the Licensee a non-exclusive, non-transferable right to install and use the Software on one (1) single production Odoo instance (identified by its unique Database UUID). Use on additional development or staging environments is permitted solely for the support of the single production instance.
+
+2. Restrictions on Use
+The Licensee shall not:
+
+Redistribute: Sell, rent, lease, lend, or sub-license the Software to any third party.
+
+Modify: Alter, merge, or adapt the Software code, or create derivative works based upon the Software.
+
+Reverse Engineer: Attempt to decompile or disassemble the logic for the purpose of recreating the Software in another environment.
+
+3. Ownership
+The Licensor retains all intellectual property rights, title, and interest in the Software. This agreement does not constitute a sale of the original Software or any copy thereof.
+
+4. Termination
+Any breach of this agreement automatically terminates the Licensee's right to use the Software, and the Licensee must immediately cease use and delete all copies.
+
+5. No Warranty
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+(c) 2025 Pretty Neat Software Ltd
