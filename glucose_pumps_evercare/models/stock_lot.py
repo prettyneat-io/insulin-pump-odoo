@@ -399,7 +399,7 @@ class StockLot(models.Model):
         
         # Get Patient Administrators group for activity assignment
         admin_group = self.env.ref(
-            'glucose_pumps_demo.group_patient_administrators', 
+            'glucose_pumps_evercare.group_patient_administrators', 
             raise_if_not_found=False
         )
         

@@ -280,7 +280,7 @@
         <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
         <field name="target">inline</field>
-        <field name="context">{'module': 'glucose_pumps_demo'}</field>
+        <field name="context">{'module': 'glucose_pumps_evercare'}</field>
     </record>
 
     <!-- Glucose Pumps Settings form view -->
@@ -291,7 +291,7 @@
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
-                <app data-string="Glucose Pumps" string="Glucose Pumps" name="glucose_pumps_demo" logo="/glucose_pumps_demo/static/description/icon.png">
+                <app data-string="Glucose Pumps" string="Glucose Pumps" name="glucose_pumps_evercare" logo="/glucose_pumps_evercare/static/description/icon.png">
                     <block title="Device Configuration" name="device_config">
                         <setting id="glucose_pumps_products" string="Glucose Pump Products" help="Products marked as 'Glucose Pump Product' will be available for device assignment. Configure this on individual Product records.">
                             <div class="text-muted mt-2">

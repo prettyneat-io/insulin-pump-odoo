@@ -16,7 +16,7 @@ class HolidayPumpController(http.Controller):
             ], limit=1)
             
             if not lot:
-                return request.render("glucose_pumps_demo.holiday_pump_request_error", {
+                return request.render("glucose_pumps_evercare.holiday_pump_request_error", {
                     'error_msg': f"Serial Number '{sn}' not found or not currently assigned to a patient."
                 })
             
@@ -39,8 +39,8 @@ class HolidayPumpController(http.Controller):
             
             # Trigger email notification (Logic to be implemented in the model or here)
             # For now, we just show the success page
-            return request.render("glucose_pumps_demo.holiday_pump_request_success", {
+            return request.render("glucose_pumps_evercare.holiday_pump_request_success", {
                 'request_name': request_record.name
             })
 
-        return request.render("glucose_pumps_demo.holiday_pump_request_template")
+        return request.render("glucose_pumps_evercare.holiday_pump_request_template")

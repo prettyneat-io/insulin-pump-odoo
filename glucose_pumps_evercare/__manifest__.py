@@ -1,5 +1,5 @@
 {
-    'name': 'Glucose Pumps Demo',
+    'name': 'Glucose Pumps Evercare',
     'version': '1.0',
     'category': 'Healthcare',
     'summary': 'Track glucose pump devices and patient assignments',
