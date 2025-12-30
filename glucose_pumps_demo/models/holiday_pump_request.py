@@ -79,6 +79,39 @@ class HolidayPumpRequest(models.Model):
         store=True
     )
 
+    # Holiday Pump Assignment
+    holiday_pump_id = fields.Many2one(
+        'stock.lot',
+        string='Assigned Holiday Pump',
+        domain="[('is_glucose_pump', '=', True), ('pump_type', '=', 'holiday'), ('pump_state', '=', 'available')]"
+    )
+
+    def action_approve(self):
+        for record in self:
+            if not record.holiday_pump_id:
+                raise models.ValidationError("Please assign a holiday pump before approving.")
+            
+            # Assign the holiday pump to the patient
+            record.holiday_pump_id.write({
+                'assigned_patient_id': record.patient_id.id,
+                'pump_state': 'assigned',
+                'assignment_type': 'holiday_pump'
+            })
+            
+            record.status = 'approved'
+            
+            # Log the assignment
+            self.env['glucose.assignment.log'].create({
+                'patient_id': record.patient_id.id,
+                'equipment_id': record.holiday_pump_id.id,
+                'assignment_type': 'holiday_pump',
+                'installation_date': record.travel_start_date,
+                'replacement_date': record.travel_end_date,
+            })
+
+    def action_reject(self):
+        self.write({'status': 'rejected'})
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:

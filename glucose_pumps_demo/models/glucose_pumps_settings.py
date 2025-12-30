@@ -38,11 +38,17 @@ class ResConfigSettings(models.TransientModel):
         help='Days before replacement date to trigger alert',
         config_parameter='glucose_pumps.replacement_alert_days',
     )
-    glucose_pumps_default_threshold = fields.Integer(
-        string='Default Consumables Threshold',
+    glucose_pumps_default_allocated_quantity = fields.Integer(
+        string='Default Allocated Quantity',
+        default=10,
+        help='Default monthly allocated quantity for consumables',
+        config_parameter='glucose_pumps.default_allocated_quantity',
+    )
+    glucose_pumps_default_critical_threshold = fields.Integer(
+        string='Default Critical Threshold',
         default=13,
-        help='Default monthly consumables threshold',
-        config_parameter='glucose_pumps.default_consumables_threshold',
+        help='Default monthly critical threshold for consumables',
+        config_parameter='glucose_pumps.default_critical_threshold',
     )
     glucose_pumps_enable_warnings = fields.Boolean(
         string='Enable Threshold Warnings',

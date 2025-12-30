@@ -6,7 +6,7 @@ This single journey is designed to touch every feature described in `spec.md`, u
 
 - **Patient Administrators** (internal Odoo users; e.g., Jonathan, Denise)
   - Full access to the Glucose Pump app
-  - Manage Patients menu under Contacts
+  - Manage Patients menu under Glucose Pumps
   - Can assign/unassign/scrap/replace devices
   - Receive replacement-date alert activities
 - **Patient** (public website visitor)
@@ -112,22 +112,22 @@ System effects:
   - On the Patient contact: notes reflecting device assignment(s)
   - On each Equipment record: note indicating assigned to Patient ID `2025-001` and assignment type
 
-## Patients Menu under Contacts (Filtered View)
+## Patients Menu (Filtered View)
 
-> This step touches the modified Patients menu in Contacts and UI rules.
+> This step touches the Patients menu and UI rules.
 
-1. **Open**: Contacts → **Patients** (new menu)
+1. **Open**: Glucose Pumps → **Patients**
 2. Confirm:
    - Only contacts with `IsPatient = true` are listed.
    - Card view shows **Patient Internal ID**.
    - The button reads **New Patient** (and creates a Contact with `IsPatient = true`).
    - Default phone/mobile fields are hidden in the Patient view.
 
-## Glucose Pumps Index Page (Dashboard + Navigation)
+## Equipment Index Page (Dashboard + Navigation)
 
-> This step touches the dashboard counts, default Devices view, Patients tab navigation, and row click behavior.
+> This step touches the dashboard counts, default Equipment view, Patients tab navigation, and row click behavior.
 
-1. **Open**: Glucose Pump App → **Glucose Pumps** (Index Page)
+1. **Open**: Glucose Pump App → **Equipment**
 2. Confirm header cards display counts for:
    - Assigned
    - Unassigned
@@ -219,9 +219,9 @@ System effects:
 
 Scenario: Alex returns from travel early; holiday pump is no longer needed.
 
-1. **Open**: Glucose Pump App → Glucose Pumps (Devices)
-2. Select the row for `SN-HOL-0012` (holiday pump)
-3. Action → **Unassign Device**
+1. **Open**: Glucose Pump App → **Equipment**
+2. Select the row for `SN-HOL-0012` (holiday pump) in the **List View**.
+3. Click **Actions** → **Unassign Device**
 
 Expected system effects:
 - Device is unlinked from patient.
@@ -237,7 +237,7 @@ Expected system effects:
 
 Scenario: The primary device malfunctions.
 
-1. **Open**: Glucose Pump App → Glucose Pumps (Devices)
+1. **Open**: Glucose Pump App → **Equipment**
 2. Select the row for primary device `SN-PRI-0007`
 3. Action → **Replace Device**
 4. In the modal, confirm it displays current device info:
@@ -274,9 +274,9 @@ Constraint coverage:
 
 Scenario: The old device `SN-PRI-0007` is diagnosed as non-repairable.
 
-1. **Open**: Glucose Pump App → Glucose Pumps (Devices)
-2. Select the row for `SN-PRI-0007` (now available)
-3. Action → **Scrap Device**
+1. **Open**: Glucose Pump App → **Equipment**
+2. Select the row for `SN-PRI-0007` (now available) in the **List View**.
+3. Click **Actions** → **Scrap Device**
 
 Expected system effects:
 - Device is unlinked from any patient (if linked).

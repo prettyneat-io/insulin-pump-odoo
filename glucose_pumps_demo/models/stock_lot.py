@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -5,6 +7,25 @@ from odoo.exceptions import ValidationError
 class StockLot(models.Model):
     """Extend stock.lot to add glucose pump equipment fields."""
     _inherit = 'stock.lot'
+
+    lifespan_years = fields.Integer(
+        string='Lifespan (Years)',
+        default=4,
+        help='Expected lifespan of the device in years'
+    )
+
+    replacement_date = fields.Date(
+        string='Replacement Date',
+        compute='_compute_replacement_date',
+        store=True,
+        help='Expected date when this device should be replaced'
+    )
+
+    replacement_alert = fields.Boolean(
+        string='Replacement Alert',
+        compute='_compute_replacement_alert',
+        store=True
+    )
 
     is_glucose_pump = fields.Boolean(
         string='Is Glucose Pump',
@@ -17,6 +38,11 @@ class StockLot(models.Model):
         ('assigned', 'Assigned'),
         ('scrapped', 'Scrapped'),
     ], string='Pump State', default='available', tracking=True)
+    
+    pump_type = fields.Selection([
+        ('primary', 'Primary'),
+        ('holiday', 'Holiday'),
+    ], string='Pump Type', default='primary', help='Distinguish between primary devices and holiday backup devices')
     
     # Link to patient
     assigned_patient_id = fields.Many2one(
@@ -63,7 +89,10 @@ class StockLot(models.Model):
                 
                 old_patient = record.assigned_patient_id
                 new_patient_id = vals.get('assigned_patient_id')
-                new_assignment_type = vals.get('assignment_type', record.assignment_type or 'primary')
+                
+                # Skip if no actual change in patient
+                if old_patient and old_patient.id == new_patient_id:
+                    continue
                 
                 # Unassign from old patient if there was one
                 if old_patient and old_patient.id != new_patient_id:
@@ -81,6 +110,13 @@ class StockLot(models.Model):
                         old_patient.with_context(skip_device_sync=True).primary_device_id = False
                     elif record.assignment_type == 'holiday_pump' and old_patient.holiday_pump_id.id == record.id:
                         old_patient.with_context(skip_device_sync=True).holiday_pump_id = False
+                    
+                    # Post note to old patient
+                    old_patient.message_post(body=f"Device SN {record.name} unassigned.")
+                
+                # Mark activities as done if unassigning or changing patient
+                if old_patient and old_patient.id != new_patient_id:
+                    record._mark_replacement_alerts_done()
         
         result = super().write(vals)
         
@@ -94,7 +130,7 @@ class StockLot(models.Model):
                     new_patient = record.assigned_patient_id
                     assignment_type = record.assignment_type or 'primary'
                     
-                    # Check if assignment log already exists
+                    # Check if assignment log already exists for this patient and device
                     existing_log = self.env['glucose.assignment.log'].search([
                         ('patient_id', '=', new_patient.id),
                         ('equipment_id', '=', record.id),
@@ -112,11 +148,14 @@ class StockLot(models.Model):
                             'installation_date': installation_date,
                         })
                     
-                    # Update patient's device fields (with context to prevent recursion)
-                    if assignment_type == 'primary' and new_patient.primary_device_id.id != record.id:
-                        new_patient.with_context(skip_device_sync=True).primary_device_id = record.id
-                    elif assignment_type == 'holiday_pump' and new_patient.holiday_pump_id.id != record.id:
-                        new_patient.with_context(skip_device_sync=True).holiday_pump_id = record.id
+                        # Update patient's device fields (with context to prevent recursion)
+                        if assignment_type == 'primary' and new_patient.primary_device_id.id != record.id:
+                            new_patient.with_context(skip_device_sync=True).primary_device_id = record.id
+                        elif assignment_type == 'holiday_pump' and new_patient.holiday_pump_id.id != record.id:
+                            new_patient.with_context(skip_device_sync=True).holiday_pump_id = record.id
+                        
+                        # Post note to new patient
+                        new_patient.message_post(body=f"Device SN {record.name} assigned as {assignment_type}.")
                     
                     # Set pump state to assigned if not already
                     if record.pump_state != 'assigned':
@@ -214,6 +253,36 @@ class StockLot(models.Model):
             'context': {'default_old_device_id': self.id},
         }
 
+    @api.depends('installation_date', 'lifespan_years')
+    def _compute_replacement_date(self):
+        """Calculate replacement date based on installation date and lifespan."""
+        for record in self:
+            if record.installation_date and record.lifespan_years:
+                try:
+                    # Try to just add the years
+                    record.replacement_date = record.installation_date.replace(
+                        year=record.installation_date.year + record.lifespan_years
+                    )
+                except ValueError:
+                    # Handle leap year case (Feb 29th)
+                    record.replacement_date = record.installation_date + timedelta(days=365 * record.lifespan_years)
+            else:
+                record.replacement_date = False
+
+    @api.depends('replacement_date')
+    def _compute_replacement_alert(self):
+        """Check if the replacement date is within the configured alert threshold."""
+        today = fields.Date.today()
+        alert_days = int(self.env['ir.config_parameter'].sudo().get_param(
+            'glucose_pumps.replacement_alert_days', default='30'
+        ))
+        alert_threshold = today + timedelta(days=alert_days)
+        for record in self:
+            if record.replacement_date and record.replacement_date <= alert_threshold:
+                record.replacement_alert = True
+            else:
+                record.replacement_alert = False
+
     @api.depends('product_id', 'product_id.product_tmpl_id.is_glucose_pump_product')
     def _compute_is_glucose_pump(self):
         """Check if this lot belongs to a glucose pump product."""
@@ -297,3 +366,100 @@ class StockLot(models.Model):
                         "RMA devices can only be used as replacements for malfunctioning primary devices "
                         "through the 'Replace Device' workflow."
                     )
+
+    def _mark_replacement_alerts_done(self):
+        """Mark any open replacement date alert activities as done."""
+        activity_type = self.env.ref('mail.mail_activity_data_todo', raise_if_not_found=False)
+        if not activity_type:
+            return
+            
+        activities = self.env['mail.activity'].search([
+            ('res_model', '=', 'stock.lot'),
+            ('res_id', 'in', self.ids),
+            ('activity_type_id', '=', activity_type.id),
+            ('summary', 'ilike', 'Replacement date approaching'),
+        ])
+        if activities:
+            activities.action_done()
+
+    @api.model
+    def _cron_check_replacement_date_alerts(self):
+        """Scheduled action to check for devices approaching replacement date.
+        
+        Creates activities on equipment records for devices that are:
+        - Assigned to a patient
+        - Have a replacement date set
+        - Replacement date is within the configured alert threshold
+        """
+        # Get alert threshold from settings (default 30 days)
+        IrConfigParameter = self.env['ir.config_parameter'].sudo()
+        alert_days = int(IrConfigParameter.get_param(
+            'glucose_pumps.replacement_alert_days', default='30'
+        ))
+        
+        # Get Patient Administrators group for activity assignment
+        admin_group = self.env.ref(
+            'glucose_pumps_demo.group_patient_administrators', 
+            raise_if_not_found=False
+        )
+        
+        # Calculate the date threshold
+        today = fields.Date.today()
+        threshold_date = today + timedelta(days=alert_days)
+        
+        # Find devices approaching replacement date
+        devices = self.search([
+            ('is_glucose_pump', '=', True),
+            ('pump_state', '=', 'assigned'),
+            ('replacement_date', '!=', False),
+            ('replacement_date', '<=', threshold_date),
+            ('replacement_date', '>=', today),  # Not already past
+        ])
+        
+        activity_type = self.env.ref('mail.mail_activity_data_todo', raise_if_not_found=False)
+        if not activity_type:
+            return
+        
+        for device in devices:
+            # Check if an activity already exists for this device
+            existing_activity = self.env['mail.activity'].search([
+                ('res_model', '=', 'stock.lot'),
+                ('res_id', '=', device.id),
+                ('activity_type_id', '=', activity_type.id),
+                ('summary', 'ilike', 'Replacement date approaching'),
+            ], limit=1)
+            
+            if existing_activity:
+                continue
+            
+            # Calculate days remaining
+            days_remaining = (device.replacement_date - today).days
+            
+            # Build activity note
+            patient_name = device.assigned_patient_id.name or 'Unknown'
+            patient_id = device.assigned_patient_id.patient_internal_id or 'N/A'
+            assignment_type = 'Primary' if device.assignment_type == 'primary' else 'Holiday Pump'
+            
+            note = (
+                f"<p><strong>Equipment SN:</strong> {device.name}</p>"
+                f"<p><strong>Patient:</strong> {patient_name} ({patient_id})</p>"
+                f"<p><strong>Assignment Type:</strong> {assignment_type}</p>"
+                f"<p><strong>Replacement Date:</strong> {device.replacement_date}</p>"
+                f"<p><strong>Days Remaining:</strong> {days_remaining}</p>"
+            )
+            
+            # Determine user to assign activity to
+            user_id = self.env.user.id
+            if admin_group and admin_group.users:
+                user_id = admin_group.users[0].id
+            
+            # Create activity
+            self.env['mail.activity'].create({
+                'res_model_id': self.env['ir.model']._get('stock.lot').id,
+                'res_id': device.id,
+                'activity_type_id': activity_type.id,
+                'summary': f'Replacement date approaching: {device.name}',
+                'note': note,
+                'date_deadline': device.replacement_date,
+                'user_id': user_id,
+            })

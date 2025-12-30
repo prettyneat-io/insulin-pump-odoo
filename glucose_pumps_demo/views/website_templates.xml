@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="holiday_pump_request_template" name="Holiday Pump Request Form">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="s_title pt32 pb32" data-snippet="s_title">
+                    <div class="container">
+                        <div class="row s_nb_column_fixed">
+                            <div class="col-lg-12 s_title_default">
+                                <h1 style="text-align: center;">Holiday Pump Request</h1>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="s_text_block pt32 pb32" data-snippet="s_text_block">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 offset-lg-2">
+                                <form action="/holiday-pump-request" method="post" class="container-fluid mt32">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <div class="form-group row mb-3">
+                                        <label class="col-lg-3 col-md-4 col-form-label" for="patient_name">Patient Name</label>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="text" class="form-control" name="patient_name" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-3">
+                                        <label class="col-lg-3 col-md-4 col-form-label" for="main_pump_serial">Main Pump Serial Number</label>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="text" class="form-control" name="main_pump_serial" required="1" placeholder="e.g. SN-PRI-0007"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-3">
+                                        <label class="col-lg-3 col-md-4 col-form-label" for="contact_phone">Mobile Number</label>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="tel" class="form-control" name="contact_phone" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-3">
+                                        <label class="col-lg-3 col-md-4 col-form-label" for="contact_email">Email Address</label>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="email" class="form-control" name="contact_email"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-3">
+                                        <label class="col-lg-3 col-md-4 col-form-label" for="travel_start_date">Travel Start Date</label>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="date" class="form-control" name="travel_start_date" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-3">
+                                        <label class="col-lg-3 col-md-4 col-form-label" for="travel_end_date">Travel End Date</label>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="date" class="form-control" name="travel_end_date" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-3">
+                                        <label class="col-lg-3 col-md-4 col-form-label" for="destination">Destination</label>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="text" class="form-control" name="destination" required="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-3">
+                                        <label class="col-lg-3 col-md-4 col-form-label" for="reason">Reason for Request</label>
+                                        <div class="col-lg-9 col-md-8">
+                                            <textarea class="form-control" name="reason" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-3">
+                                        <label class="col-lg-3 col-md-4 col-form-label" for="additional_notes">Additional Notes</label>
+                                        <div class="col-lg-9 col-md-8">
+                                            <textarea class="form-control" name="additional_notes" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-lg-3 offset-md-4 col-sm-auto">
+                                            <button type="submit" class="btn btn-primary">Submit Request</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <template id="holiday_pump_request_success" name="Holiday Pump Request Success">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="container mt64 mb64">
+                    <div class="row">
+                        <div class="col-lg-8 offset-lg-2 text-center">
+                            <div class="alert alert-success" role="alert">
+                                <h4 class="alert-heading">Request Submitted Successfully!</h4>
+                                <p>Your holiday pump request <strong><t t-esc="request_name"/></strong> has been received.</p>
+                                <hr/>
+                                <p class="mb-0">Our team will review your request and contact you shortly.</p>
+                            </div>
+                            <a href="/" class="btn btn-primary mt32">Back to Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="holiday_pump_request_error" name="Holiday Pump Request Error">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="container mt64 mb64">
+                    <div class="row">
+                        <div class="col-lg-8 offset-lg-2 text-center">
+                            <div class="alert alert-danger" role="alert">
+                                <h4 class="alert-heading">Error Submitting Request</h4>
+                                <p><t t-esc="error_msg"/></p>
+                            </div>
+                            <a href="/holiday-pump-request" class="btn btn-secondary mt32">Try Again</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -35,6 +35,27 @@
                         </group>
                     </group>
                 </page>
+                <page string="Assignment History" name="assignment_history" invisible="not is_patient">
+                    <field name="assignment_log_ids" readonly="1">
+                        <list>
+                            <field name="equipment_id"/>
+                            <field name="assignment_type"/>
+                            <field name="installation_date"/>
+                            <field name="replacement_date"/>
+                        </list>
+                    </field>
+                </page>
+                <page string="Consumables" name="consumables" invisible="not is_patient">
+                    <field name="consumables_allocation_ids" readonly="1">
+                        <list decoration-danger="threshold_status == 'red'" decoration-warning="threshold_status == 'orange'" decoration-success="threshold_status == 'green'">
+                            <field name="month"/>
+                            <field name="year"/>
+                            <field name="quantity_allocated"/>
+                            <field name="quantity_used"/>
+                            <field name="threshold_status" widget="badge"/>
+                        </list>
+                    </field>
+                </page>
             </xpath>
         </field>
     </record>

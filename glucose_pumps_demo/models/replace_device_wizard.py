@@ -150,15 +150,7 @@ class GlucoseReplaceDeviceWizard(models.TransientModel):
             'installation_date': fields.Date.today(),
         })
         
-        # 7. Create new assignment log with current date as installation date
-        self.env['glucose.assignment.log'].create({
-            'patient_id': patient.id,
-            'equipment_id': new_device.id,
-            'assignment_type': 'primary',
-            'installation_date': fields.Date.today(),
-        })
-        
-        # 8. Leave notes in chatter
+        # 7. Leave notes in chatter
         # Patient chatter message
         patient_msg = (
             f"Primary device SN {old_device.name} replaced with RMA device SN {new_device.name}. "

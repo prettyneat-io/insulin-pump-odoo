@@ -86,7 +86,30 @@ class ResPartner(models.Model):
                     record._assign_device(record.primary_device_id, 'primary')
                 if record.holiday_pump_id:
                     record._assign_device(record.holiday_pump_id, 'holiday_pump')
+                # Create initial consumables allocation for the current month
+                record._create_initial_consumables_allocation()
         return records
+
+    def _create_initial_consumables_allocation(self):
+        """Create a consumables allocation record for the current month."""
+        self.ensure_one()
+        today = fields.Date.today()
+        month = str(today.month)
+        year = today.year
+        
+        # Check if allocation already exists
+        existing = self.env['glucose.consumables.allocation'].search([
+            ('patient_id', '=', self.id),
+            ('month', '=', month),
+            ('year', '=', year)
+        ], limit=1)
+        
+        if not existing:
+            self.env['glucose.consumables.allocation'].create({
+                'patient_id': self.id,
+                'month': month,
+                'year': year,
+            })
 
     def write(self, vals):
         # Skip device sync if called from stock.lot to prevent recursion
@@ -125,10 +148,13 @@ class ResPartner(models.Model):
         result = super().write(vals)
         
         # Now handle new device assignments after the write
-        if 'primary_device_id' in vals or 'holiday_pump_id' in vals:
+        if 'primary_device_id' in vals or 'holiday_pump_id' in vals or 'is_patient' in vals:
             for record in self:
                 if not record.is_patient:
                     continue
+                
+                if 'is_patient' in vals:
+                    record._create_initial_consumables_allocation()
                 
                 if 'primary_device_id' in vals and record.primary_device_id:
                     # Check if this device already has an active assignment log for this patient
@@ -154,40 +180,28 @@ class ResPartner(models.Model):
         return result
 
     def _assign_device(self, device, assignment_type):
-        """Assign a device to this patient and create assignment log."""
+        """Assign a device to this patient.
+        
+        The assignment log is created in stock.lot.write().
+        """
         self.ensure_one()
         
-        # Update device state
+        # Update device state (this will trigger stock.lot.write and create the log)
         device.write({
             'pump_state': 'assigned',
             'assigned_patient_id': self.id,
             'assignment_type': assignment_type,
             'installation_date': self.installation_date or fields.Date.today(),
         })
-        
-        # Create assignment log
-        self.env['glucose.assignment.log'].create({
-            'patient_id': self.id,
-            'equipment_id': device.id,
-            'assignment_type': assignment_type,
-            'installation_date': self.installation_date or fields.Date.today(),
-        })
 
     def _unassign_device(self, device, assignment_type):
-        """Unassign a device from this patient."""
+        """Unassign a device from this patient.
+        
+        The assignment log is updated in stock.lot.write().
+        """
         self.ensure_one()
         
-        # Set replacement date on assignment log
-        log = self.env['glucose.assignment.log'].search([
-            ('patient_id', '=', self.id),
-            ('equipment_id', '=', device.id),
-            ('assignment_type', '=', assignment_type),
-            ('replacement_date', '=', False),
-        ], limit=1)
-        if log:
-            log.replacement_date = fields.Date.today()
-        
-        # Update device state
+        # Update device state (this will trigger stock.lot.write and update the log)
         device.write({
             'pump_state': 'available',
             'assigned_patient_id': False,

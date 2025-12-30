@@ -6,6 +6,13 @@
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_unassign_device" string="Unassign Device" type="object" invisible="not is_glucose_pump or pump_state != 'assigned'"/>
+                    <button name="action_scrap_device" string="Scrap Device" type="object" invisible="not is_glucose_pump or pump_state == 'scrapped'"/>
+                    <button name="action_replace_device_wizard" string="Replace Device" type="object" invisible="not is_glucose_pump or pump_state != 'assigned' or assignment_type != 'primary'"/>
+                </header>
+            </xpath>
             <xpath expr="//group[@name='main_group']" position="after">
                 <group string="Glucose Pump Info" invisible="not is_glucose_pump">
                     <group>
@@ -16,22 +23,28 @@
                     </group>
                     <group>
                         <field name="assigned_patient_id" invisible="pump_state != 'assigned'" options="{'no_create': True}"/>
+                        <field name="installation_date" invisible="pump_state != 'assigned'"/>
+                        <field name="lifespan_years" invisible="pump_state != 'assigned'"/>
+                        <field name="replacement_date" invisible="pump_state != 'assigned'"/>
+                        <field name="replacement_alert" invisible="1"/>
                     </group>
                 </group>
-                <!-- Linked Patient Information Tab -->
-                <notebook invisible="not is_glucose_pump">
-                    <page string="Linked Patient Information" name="linked_patient_info">
-                        <field name="assignment_log_ids" readonly="1">
-                            <list>
-                                <field name="patient_internal_id" string="Patient ID"/>
-                                <field name="patient_id" string="Patient Name"/>
-                                <field name="assignment_type"/>
-                                <field name="installation_date"/>
-                                <field name="replacement_date"/>
-                            </list>
-                        </field>
-                    </page>
-                </notebook>
+                <div class="alert alert-warning mb-0" role="alert" invisible="not replacement_alert or pump_state != 'assigned'">
+                    <strong>Warning!</strong> This device is approaching its replacement date (<field name="replacement_date" readonly="1"/>).
+                </div>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Linked Patient Information" name="linked_patient_info" invisible="not is_glucose_pump">
+                    <field name="assignment_log_ids" readonly="1">
+                        <list>
+                            <field name="patient_internal_id" string="Patient ID"/>
+                            <field name="patient_id" string="Patient Name"/>
+                            <field name="assignment_type"/>
+                            <field name="installation_date"/>
+                            <field name="replacement_date"/>
+                        </list>
+                    </field>
+                </page>
             </xpath>
         </field>
     </record>
@@ -50,6 +63,8 @@
                 <field name="pump_state" widget="badge" decoration-success="pump_state == 'available'" decoration-warning="pump_state == 'assigned'" decoration-danger="pump_state == 'scrapped'"/>
                 <field name="assignment_type"/>
                 <field name="installation_date"/>
+                <field name="replacement_date" decoration-danger="replacement_alert"/>
+                <field name="replacement_alert" column_invisible="1"/>
                 <field name="activity_ids" widget="list_activity"/>
             </list>
         </field>
@@ -120,7 +135,7 @@
         <field name="res_model">stock.lot</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="domain">[('is_glucose_pump', '=', True)]</field>
-        <field name="context">{'search_default_group_state': 1}</field>
+        <field name="context">{'search_default_group_state': 1, 'display_complete': True}</field>
         <field name="view_ids" eval="[(5, 0, 0),
             (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_stock_lot_kanban_glucose_pumps')}),
             (0, 0, {'view_mode': 'list', 'view_id': ref('view_stock_lot_tree_glucose_pumps')})]"/>

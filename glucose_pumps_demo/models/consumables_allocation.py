@@ -8,6 +8,11 @@ class ConsumablesAllocation(models.Model):
     _rec_name = 'display_name'
     _order = 'year desc, month desc'
 
+    _sql_constraints = [
+        ('patient_month_year_unique', 'unique(patient_id, month, year)', 
+         'An allocation record already exists for this patient in the selected month and year.')
+    ]
+
     patient_id = fields.Many2one(
         'res.partner',
         string='Patient',
@@ -35,9 +40,18 @@ class ConsumablesAllocation(models.Model):
         default=lambda self: fields.Date.today().year
     )
     
+    @api.model
+    def default_get(self, fields_list):
+        res = super().default_get(fields_list)
+        get_param = self.env['ir.config_parameter'].sudo().get_param
+        if 'quantity_allocated' in fields_list:
+            res['quantity_allocated'] = int(get_param('glucose_pumps.default_allocated_quantity', 10))
+        if 'threshold' in fields_list:
+            res['threshold'] = int(get_param('glucose_pumps.default_critical_threshold', 13))
+        return res
+
     quantity_allocated = fields.Integer(
-        string='Quantity Allocated',
-        default=0
+        string='Quantity Allocated'
     )
     quantity_used = fields.Integer(
         string='Quantity Used',
@@ -45,7 +59,6 @@ class ConsumablesAllocation(models.Model):
     )
     threshold = fields.Integer(
         string='Threshold',
-        default=13,
         help='Maximum number of consumables before warning'
     )
     
@@ -67,18 +80,25 @@ class ConsumablesAllocation(models.Model):
         store=True
     )
 
-    @api.depends('quantity_used', 'quantity_allocated')
+    @api.depends('quantity_used', 'quantity_allocated', 'threshold')
     def _compute_threshold_status(self):
         """Compute threshold status based on usage.
         
-        Green: 10 or less used
-        Orange: 11 to 13 used
-        Red: more than allocated
+        Normal (green): quantity_used <= quantity_allocated
+        Warning (orange): quantity_allocated < quantity_used <= threshold
+        Exceeded (red): quantity_used > threshold
         """
+        get_param = self.env['ir.config_parameter'].sudo().get_param
+        default_allocated = int(get_param('glucose_pumps.default_allocated_quantity', 10))
+        default_threshold = int(get_param('glucose_pumps.default_critical_threshold', 13))
+        
         for record in self:
-            if record.quantity_used <= 10:
+            allocated = record.quantity_allocated or default_allocated
+            threshold = record.threshold or default_threshold
+            
+            if record.quantity_used <= allocated:
                 record.threshold_status = 'green'
-            elif record.quantity_used <= 13:
+            elif record.quantity_used <= threshold:
                 record.threshold_status = 'orange'
             else:
                 record.threshold_status = 'red'
@@ -91,19 +111,21 @@ class ConsumablesAllocation(models.Model):
             month_name = month_names.get(record.month, '')
             record.display_name = f"{patient_name} - {month_name} {record.year}"
 
-    @api.constrains('threshold')
-    def _check_threshold_positive(self):
+    @api.constrains('threshold', 'quantity_allocated')
+    def _check_threshold_values(self):
         for record in self:
             if record.threshold <= 0:
                 raise models.ValidationError("Threshold must be a positive integer.")
+            if record.threshold <= record.quantity_allocated:
+                raise models.ValidationError("The Critical Threshold must always be greater than the Allocated Quantity.")
 
     @api.onchange('quantity_allocated')
     def _onchange_quantity_allocated(self):
-        """Show warning if more than 13 consumables allocated."""
-        if self.quantity_allocated > 13:
+        """Show warning if more than threshold consumables allocated."""
+        if self.quantity_allocated > self.threshold:
             return {
                 'warning': {
                     'title': 'Charge for additional pumps',
-                    'message': 'More than 13 consumables allocated. Additional charges may apply.',
+                    'message': f'More than {self.threshold} consumables allocated. Additional charges may apply.',
                 }
             }
