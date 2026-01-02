@@ -3,8 +3,8 @@ from odoo import fields, models
 
 class AssignmentLog(models.Model):
     """Log of device assignments to patients."""
-    _name = 'glucose.assignment.log'
-    _description = 'Glucose Pump Assignment Log'
+    _name = 'insulin.assignment.log'
+    _description = 'Insulin Pump Assignment Log'
     _order = 'installation_date desc'
 
     patient_id = fields.Many2one(
@@ -46,3 +46,4 @@ class AssignmentLog(models.Model):
         string='Equipment SN',
         store=True
     )
+

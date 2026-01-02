@@ -3,7 +3,7 @@ from odoo import api, fields, models
 
 class HolidayPumpRequest(models.Model):
     """Holiday pump requests submitted via public website form."""
-    _name = 'glucose.holiday.pump.request'
+    _name = 'insulin.holiday.pump.request'
     _description = 'Holiday Pump Request'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'submitted_date desc'
@@ -83,7 +83,7 @@ class HolidayPumpRequest(models.Model):
     holiday_pump_id = fields.Many2one(
         'stock.lot',
         string='Assigned Holiday Pump',
-        domain="[('is_glucose_pump', '=', True), ('pump_type', '=', 'holiday'), ('pump_state', '=', 'available')]"
+        domain="[('is_insulin_pump', '=', True), ('pump_type', '=', 'holiday'), ('pump_state', '=', 'available')]"
     )
 
     def action_approve(self):
@@ -101,7 +101,7 @@ class HolidayPumpRequest(models.Model):
             record.status = 'approved'
             
             # Log the assignment
-            self.env['glucose.assignment.log'].create({
+            self.env['insulin.assignment.log'].create({
                 'patient_id': record.patient_id.id,
                 'equipment_id': record.holiday_pump_id.id,
                 'assignment_type': 'holiday_pump',
@@ -117,7 +117,7 @@ class HolidayPumpRequest(models.Model):
         for vals in vals_list:
             if vals.get('name', 'New') == 'New':
                 vals['name'] = self.env['ir.sequence'].next_by_code(
-                    'glucose.holiday.pump.request'
+                    'insulin.holiday.pump.request'
                 ) or 'New'
             
             # Try to link to existing patient by serial number
@@ -125,9 +125,10 @@ class HolidayPumpRequest(models.Model):
                 serial = vals['main_pump_serial'].strip()
                 lot = self.env['stock.lot'].search([
                     ('name', '=ilike', serial),
-                    ('is_glucose_pump', '=', True),
+                    ('is_insulin_pump', '=', True),
                 ], limit=1)
                 if lot and lot.assigned_patient_id:
                     vals['patient_id'] = lot.assigned_patient_id.id
         
         return super().create(vals_list)
+

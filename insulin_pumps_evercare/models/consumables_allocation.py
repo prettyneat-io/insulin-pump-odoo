@@ -3,8 +3,8 @@ from odoo import api, fields, models
 
 class ConsumablesAllocation(models.Model):
     """Track consumables allocated and used per patient per month."""
-    _name = 'glucose.consumables.allocation'
-    _description = 'Glucose Pump Consumables Allocation'
+    _name = 'insulin.consumables.allocation'
+    _description = 'Insulin Pump Consumables Allocation'
     _rec_name = 'display_name'
     _order = 'year desc, month desc'
 
@@ -45,9 +45,9 @@ class ConsumablesAllocation(models.Model):
         res = super().default_get(fields_list)
         get_param = self.env['ir.config_parameter'].sudo().get_param
         if 'quantity_allocated' in fields_list:
-            res['quantity_allocated'] = int(get_param('glucose_pumps.default_allocated_quantity', 10))
+            res['quantity_allocated'] = int(get_param('insulin_pumps.default_allocated_quantity', 10))
         if 'threshold' in fields_list:
-            res['threshold'] = int(get_param('glucose_pumps.default_critical_threshold', 13))
+            res['threshold'] = int(get_param('insulin_pumps.default_critical_threshold', 13))
         return res
 
     quantity_allocated = fields.Integer(
@@ -89,8 +89,8 @@ class ConsumablesAllocation(models.Model):
         Exceeded (red): quantity_used > threshold
         """
         get_param = self.env['ir.config_parameter'].sudo().get_param
-        default_allocated = int(get_param('glucose_pumps.default_allocated_quantity', 10))
-        default_threshold = int(get_param('glucose_pumps.default_critical_threshold', 13))
+        default_allocated = int(get_param('insulin_pumps.default_allocated_quantity', 10))
+        default_threshold = int(get_param('insulin_pumps.default_critical_threshold', 13))
         
         for record in self:
             allocated = record.quantity_allocated or default_allocated
@@ -129,3 +129,4 @@ class ConsumablesAllocation(models.Model):
                     'message': f'More than {self.threshold} consumables allocated. Additional charges may apply.',
                 }
             }
+

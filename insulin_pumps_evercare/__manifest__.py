@@ -10,7 +10,7 @@
     'development_status': 'Production/Stable',
     'depends': ['base', 'stock', 'website', 'mail'],
     'data': [
-        'security/glucose_pumps_security.xml',
+        'security/insulin_pumps_security.xml',
         'security/ir.model.access.csv',
         'data/ir_sequence_data.xml',
         'data/ir_cron_data.xml',
@@ -26,7 +26,7 @@
         'data/res_config_settings_data.xml',
         'views/res_partner_views.xml',
         'views/stock_lot_views.xml',
-        'views/glucose_pumps_views.xml',
+        'views/insulin_pumps_views.xml',
         'views/replace_device_wizard_views.xml',
         'views/website_templates.xml',
     ],

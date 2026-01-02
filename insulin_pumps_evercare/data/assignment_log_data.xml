@@ -2,14 +2,14 @@
 <odoo>
     <data noupdate="1">
         <!-- Assignment Logs for Patient 1: Maria Borg -->
-        <record id="assignment_log_maria_primary" model="glucose.assignment.log">
+        <record id="assignment_log_maria_primary" model="insulin.assignment.log">
             <field name="patient_id" ref="patient_maria_borg"/>
             <field name="equipment_id" ref="lot_tslim_100"/>
             <field name="assignment_type">primary</field>
             <field name="installation_date">2023-06-15</field>
         </record>
 
-        <record id="assignment_log_maria_holiday" model="glucose.assignment.log">
+        <record id="assignment_log_maria_holiday" model="insulin.assignment.log">
             <field name="patient_id" ref="patient_maria_borg"/>
             <field name="equipment_id" ref="lot_tslim_hp_001"/>
             <field name="assignment_type">holiday_pump</field>
@@ -17,7 +17,7 @@
         </record>
 
         <!-- Assignment Logs for Patient 2: Joseph Camilleri -->
-        <record id="assignment_log_joseph_primary" model="glucose.assignment.log">
+        <record id="assignment_log_joseph_primary" model="insulin.assignment.log">
             <field name="patient_id" ref="patient_joseph_camilleri"/>
             <field name="equipment_id" ref="lot_tslim_101"/>
             <field name="assignment_type">primary</field>
@@ -26,7 +26,7 @@
 
         <!-- Assignment Logs for Patient 3: Carmen Farrugia -->
         <!-- She had a previous device that was replaced -->
-        <record id="assignment_log_carmen_old" model="glucose.assignment.log">
+        <record id="assignment_log_carmen_old" model="insulin.assignment.log">
             <field name="patient_id" ref="patient_carmen_farrugia"/>
             <field name="equipment_id" ref="lot_tslim_scrap_001"/>
             <field name="assignment_type">primary</field>
@@ -34,7 +34,7 @@
             <field name="replacement_date">2024-08-15</field>
         </record>
 
-        <record id="assignment_log_carmen_current" model="glucose.assignment.log">
+        <record id="assignment_log_carmen_current" model="insulin.assignment.log">
             <field name="patient_id" ref="patient_carmen_farrugia"/>
             <field name="equipment_id" ref="lot_tslim_102"/>
             <field name="assignment_type">primary</field>
@@ -42,7 +42,7 @@
         </record>
 
         <!-- Assignment Logs for Patient 4: Paul Vella -->
-        <record id="assignment_log_paul_primary" model="glucose.assignment.log">
+        <record id="assignment_log_paul_primary" model="insulin.assignment.log">
             <field name="patient_id" ref="patient_paul_vella"/>
             <field name="equipment_id" ref="lot_mm780g_002"/>
             <field name="assignment_type">primary</field>
@@ -50,3 +50,4 @@
         </record>
     </data>
 </odoo>
+

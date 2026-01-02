@@ -2,7 +2,7 @@
 <odoo>
     <data noupdate="1">
         <!-- Insulin Pumps Module Category -->
-        <record id="module_category_glucose_pumps" model="ir.module.category">
+        <record id="module_category_insulin_pumps" model="ir.module.category">
             <field name="name">Insulin Pumps</field>
             <field name="description">Category for Insulin Pump management</field>
             <field name="sequence">50</field>
@@ -11,7 +11,7 @@
         <!-- Patient Administrators Group -->
         <record id="group_patient_administrators" model="res.groups">
             <field name="name">Patient Administrators</field>
-            <field name="category_id" ref="module_category_glucose_pumps"/>
+            <field name="category_id" ref="module_category_insulin_pumps"/>
             <field name="comment">
                 Patient Administrators can:
                 - View/Edit Patient App
@@ -22,3 +22,4 @@
         </record>
     </data>
 </odoo>
+

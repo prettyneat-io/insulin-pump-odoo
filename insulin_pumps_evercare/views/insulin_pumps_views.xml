@@ -2,8 +2,8 @@
 <odoo>
     <!-- Training Location list view -->
     <record id="view_training_location_tree" model="ir.ui.view">
-        <field name="name">glucose.training.location.tree</field>
-        <field name="model">glucose.training.location</field>
+        <field name="name">insulin.training.location.tree</field>
+        <field name="model">insulin.training.location</field>
         <field name="arch" type="xml">
             <list string="Training Locations">
                 <field name="name"/>
@@ -14,8 +14,8 @@
 
     <!-- Training Location form view -->
     <record id="view_training_location_form" model="ir.ui.view">
-        <field name="name">glucose.training.location.form</field>
-        <field name="model">glucose.training.location</field>
+        <field name="name">insulin.training.location.form</field>
+        <field name="model">insulin.training.location</field>
         <field name="arch" type="xml">
             <form string="Training Location">
                 <sheet>
@@ -46,7 +46,7 @@
     <!-- Training Location action -->
     <record id="action_training_locations" model="ir.actions.act_window">
         <field name="name">Training Locations</field>
-        <field name="res_model">glucose.training.location</field>
+        <field name="res_model">insulin.training.location</field>
         <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -57,8 +57,8 @@
 
     <!-- Assignment Log list view -->
     <record id="view_assignment_log_tree" model="ir.ui.view">
-        <field name="name">glucose.assignment.log.tree</field>
-        <field name="model">glucose.assignment.log</field>
+        <field name="name">insulin.assignment.log.tree</field>
+        <field name="model">insulin.assignment.log</field>
         <field name="arch" type="xml">
             <list string="Assignment Logs">
                 <field name="installation_date"/>
@@ -74,8 +74,8 @@
 
     <!-- Assignment Log form view -->
     <record id="view_assignment_log_form" model="ir.ui.view">
-        <field name="name">glucose.assignment.log.form</field>
-        <field name="model">glucose.assignment.log</field>
+        <field name="name">insulin.assignment.log.form</field>
+        <field name="model">insulin.assignment.log</field>
         <field name="arch" type="xml">
             <form string="Assignment Log">
                 <sheet>
@@ -100,14 +100,14 @@
     <!-- Assignment Log action -->
     <record id="action_assignment_logs" model="ir.actions.act_window">
         <field name="name">Assignment History</field>
-        <field name="res_model">glucose.assignment.log</field>
+        <field name="res_model">insulin.assignment.log</field>
         <field name="view_mode">list,form</field>
     </record>
 
     <!-- Consumables Allocation list view -->
     <record id="view_consumables_allocation_tree" model="ir.ui.view">
-        <field name="name">glucose.consumables.allocation.tree</field>
-        <field name="model">glucose.consumables.allocation</field>
+        <field name="name">insulin.consumables.allocation.tree</field>
+        <field name="model">insulin.consumables.allocation</field>
         <field name="arch" type="xml">
             <list string="Consumables Allocations">
                 <field name="patient_internal_id"/>
@@ -126,8 +126,8 @@
 
     <!-- Consumables Allocation form view -->
     <record id="view_consumables_allocation_form" model="ir.ui.view">
-        <field name="name">glucose.consumables.allocation.form</field>
-        <field name="model">glucose.consumables.allocation</field>
+        <field name="name">insulin.consumables.allocation.form</field>
+        <field name="model">insulin.consumables.allocation</field>
         <field name="arch" type="xml">
             <form string="Consumables Allocation">
                 <sheet>
@@ -159,14 +159,14 @@
     <!-- Consumables Allocation action -->
     <record id="action_consumables_allocations" model="ir.actions.act_window">
         <field name="name">Consumables Allocations</field>
-        <field name="res_model">glucose.consumables.allocation</field>
+        <field name="res_model">insulin.consumables.allocation</field>
         <field name="view_mode">list,form</field>
     </record>
 
     <!-- Holiday Pump Request list view -->
     <record id="view_holiday_pump_request_tree" model="ir.ui.view">
-        <field name="name">glucose.holiday.pump.request.tree</field>
-        <field name="model">glucose.holiday.pump.request</field>
+        <field name="name">insulin.holiday.pump.request.tree</field>
+        <field name="model">insulin.holiday.pump.request</field>
         <field name="arch" type="xml">
             <list string="Holiday Pump Requests">
                 <field name="name"/>
@@ -186,8 +186,8 @@
 
     <!-- Holiday Pump Request form view -->
     <record id="view_holiday_pump_request_form" model="ir.ui.view">
-        <field name="name">glucose.holiday.pump.request.form</field>
-        <field name="model">glucose.holiday.pump.request</field>
+        <field name="name">insulin.holiday.pump.request.form</field>
+        <field name="model">insulin.holiday.pump.request</field>
         <field name="arch" type="xml">
             <form string="Holiday Pump Request">
                 <header>
@@ -234,21 +234,21 @@
     <!-- Holiday Pump Request action -->
     <record id="action_holiday_pump_requests" model="ir.actions.act_window">
         <field name="name">Holiday Pump Requests</field>
-        <field name="res_model">glucose.holiday.pump.request</field>
+        <field name="res_model">insulin.holiday.pump.request</field>
         <field name="view_mode">list,form</field>
     </record>
 
     <!-- Consumables menu directly under root -->
     <menuitem id="menu_consumables_allocations"
         name="Consumables"
-        parent="menu_glucose_pumps_root"
+        parent="menu_insulin_pumps_root"
         action="action_consumables_allocations"
         sequence="30"/>
 
     <!-- Submenus for operations -->
     <menuitem id="menu_operations"
         name="Operations"
-        parent="menu_glucose_pumps_root"
+        parent="menu_insulin_pumps_root"
         sequence="40"/>
     
     <menuitem id="menu_assignment_history"
@@ -265,7 +265,7 @@
 
     <menuitem id="menu_configuration"
         name="Configuration"
-        parent="menu_glucose_pumps_root"
+        parent="menu_insulin_pumps_root"
         sequence="100"/>
     
     <menuitem id="menu_training_locations"
@@ -275,7 +275,7 @@
         sequence="10"/>
 
     <!-- Settings action -->
-    <record id="action_glucose_pumps_settings" model="ir.actions.act_window">
+    <record id="action_insulin_pumps_settings" model="ir.actions.act_window">
         <field name="name">Settings</field>
         <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
@@ -284,8 +284,8 @@
     </record>
 
     <!-- Insulin Pumps Settings form view -->
-    <record id="view_glucose_pumps_settings_form" model="ir.ui.view">
-        <field name="name">res.config.settings.view.form.glucose.pumps</field>
+    <record id="view_insulin_pumps_settings_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.insulin.pumps</field>
         <field name="model">res.config.settings</field>
         <field name="priority">999</field>
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
@@ -293,7 +293,7 @@
             <xpath expr="//form" position="inside">
                 <app data-string="Insulin Pumps" string="Insulin Pumps" name="insulin_pumps_evercare" logo="/insulin_pumps_evercare/static/description/icon.png">
                     <block title="Device Configuration" name="device_config">
-                        <setting id="glucose_pumps_products" string="Insulin Pump Products" help="Products marked as 'Insulin Pump Product' will be available for device assignment. Configure this on individual Product records.">
+                        <setting id="insulin_pumps_products" string="Insulin Pump Products" help="Products marked as 'Insulin Pump Product' will be available for device assignment. Configure this on individual Product records.">
                             <div class="text-muted mt-2">
                                 <i class="fa fa-info-circle"/> Go to Inventory &gt; Products to mark products as insulin pump products.
                             </div>
@@ -305,7 +305,7 @@
                         </setting>
                         <setting id="return_location" string="Return Location" help="Location for returned devices.">
                             <div class="content-group mt-2">
-                                <field name="glucose_pumps_return_location_id"/>
+                                <field name="insulin_pumps_return_location_id"/>
                             </div>
                         </setting>
                     </block>
@@ -313,8 +313,8 @@
                         <setting id="replacement_alert" string="Replacement Date Alerts" help="Days before replacement date to trigger an alert activity.">
                             <div class="content-group mt-2">
                                 <div class="row">
-                                    <label for="glucose_pumps_replacement_alert_days" class="col-lg-4"/>
-                                    <field name="glucose_pumps_replacement_alert_days" class="oe_inline"/> days
+                                    <label for="insulin_pumps_replacement_alert_days" class="col-lg-4"/>
+                                    <field name="insulin_pumps_replacement_alert_days" class="oe_inline"/> days
                                 </div>
                             </div>
                         </setting>
@@ -323,25 +323,25 @@
                         <setting id="consumables_threshold" string="Consumables Thresholds" help="Monthly thresholds for consumables allocation status.">
                             <div class="content-group mt-2">
                                 <div class="row">
-                                    <label for="glucose_pumps_default_allocated_quantity" class="col-lg-4"/>
-                                    <field name="glucose_pumps_default_allocated_quantity" class="oe_inline"/> units (Allocated)
+                                    <label for="insulin_pumps_default_allocated_quantity" class="col-lg-4"/>
+                                    <field name="insulin_pumps_default_allocated_quantity" class="oe_inline"/> units (Allocated)
                                 </div>
                                 <div class="row">
-                                    <label for="glucose_pumps_default_critical_threshold" class="col-lg-4"/>
-                                    <field name="glucose_pumps_default_critical_threshold" class="oe_inline"/> units (Critical Threshold)
+                                    <label for="insulin_pumps_default_critical_threshold" class="col-lg-4"/>
+                                    <field name="insulin_pumps_default_critical_threshold" class="oe_inline"/> units (Critical Threshold)
                                 </div>
                             </div>
                         </setting>
                         <setting id="threshold_warnings" string="Enable Threshold Warnings" help="Show warnings when consumables usage approaches or exceeds threshold.">
-                            <field name="glucose_pumps_enable_warnings"/>
+                            <field name="insulin_pumps_enable_warnings"/>
                         </setting>
                     </block>
                     <block title="Helpdesk Configuration" name="helpdesk_config">
                         <setting id="helpdesk_email" string="Helpdesk Email" help="Email address for incoming and outgoing helpdesk communications.">
                             <div class="content-group mt-2">
                                 <div class="row">
-                                    <label for="glucose_pumps_helpdesk_email" class="col-lg-4"/>
-                                    <field name="glucose_pumps_helpdesk_email" class="oe_inline"/>
+                                    <label for="insulin_pumps_helpdesk_email" class="col-lg-4"/>
+                                    <field name="insulin_pumps_helpdesk_email" class="oe_inline"/>
                                 </div>
                             </div>
                         </setting>
@@ -351,9 +351,10 @@
         </field>
     </record>
 
-    <menuitem id="menu_glucose_pumps_settings"
+    <menuitem id="menu_insulin_pumps_settings"
         name="Settings"
         parent="menu_configuration"
-        action="action_glucose_pumps_settings"
+        action="action_insulin_pumps_settings"
         sequence="99"/>
 </odoo>
+

@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 
 
 class StockLot(models.Model):
-    """Extend stock.lot to add glucose pump equipment fields."""
+    """Extend stock.lot to add insulin pump equipment fields."""
     _inherit = 'stock.lot'
 
     lifespan_years = fields.Integer(
@@ -27,9 +27,9 @@ class StockLot(models.Model):
         store=True
     )
 
-    is_glucose_pump = fields.Boolean(
-        string='Is Glucose Pump',
-        compute='_compute_is_glucose_pump',
+    is_insulin_pump = fields.Boolean(
+        string='Is Insulin Pump',
+        compute='_compute_is_insulin_pump',
         store=True
     )
     
@@ -67,7 +67,7 @@ class StockLot(models.Model):
     
     # Assignment history for this device
     assignment_log_ids = fields.One2many(
-        'glucose.assignment.log',
+        'insulin.assignment.log',
         'equipment_id',
         string='Assignment History'
     )
@@ -84,7 +84,7 @@ class StockLot(models.Model):
         # Track patient assignment changes
         if 'assigned_patient_id' in vals:
             for record in self:
-                if not record.is_glucose_pump:
+                if not record.is_insulin_pump:
                     continue
                 
                 old_patient = record.assigned_patient_id
@@ -97,7 +97,7 @@ class StockLot(models.Model):
                 # Unassign from old patient if there was one
                 if old_patient and old_patient.id != new_patient_id:
                     # Set replacement date on old assignment log
-                    old_log = self.env['glucose.assignment.log'].search([
+                    old_log = self.env['insulin.assignment.log'].search([
                         ('patient_id', '=', old_patient.id),
                         ('equipment_id', '=', record.id),
                         ('replacement_date', '=', False),
@@ -123,7 +123,7 @@ class StockLot(models.Model):
         # Handle new patient assignment after the write
         if 'assigned_patient_id' in vals:
             for record in self:
-                if not record.is_glucose_pump:
+                if not record.is_insulin_pump:
                     continue
                 
                 if record.assigned_patient_id:
@@ -131,7 +131,7 @@ class StockLot(models.Model):
                     assignment_type = record.assignment_type or 'primary'
                     
                     # Check if assignment log already exists for this patient and device
-                    existing_log = self.env['glucose.assignment.log'].search([
+                    existing_log = self.env['insulin.assignment.log'].search([
                         ('patient_id', '=', new_patient.id),
                         ('equipment_id', '=', record.id),
                         ('assignment_type', '=', assignment_type),
@@ -141,7 +141,7 @@ class StockLot(models.Model):
                     if not existing_log:
                         # Create new assignment log
                         installation_date = record.installation_date or new_patient.installation_date or fields.Date.today()
-                        self.env['glucose.assignment.log'].create({
+                        self.env['insulin.assignment.log'].create({
                             'patient_id': new_patient.id,
                             'equipment_id': record.id,
                             'assignment_type': assignment_type,
@@ -247,7 +247,7 @@ class StockLot(models.Model):
         return {
             'name': 'Replace Device',
             'type': 'ir.actions.act_window',
-            'res_model': 'glucose.replace.device.wizard',
+            'res_model': 'insulin.replace.device.wizard',
             'view_mode': 'form',
             'target': 'new',
             'context': {'default_old_device_id': self.id},
@@ -274,7 +274,7 @@ class StockLot(models.Model):
         """Check if the replacement date is within the configured alert threshold."""
         today = fields.Date.today()
         alert_days = int(self.env['ir.config_parameter'].sudo().get_param(
-            'glucose_pumps.replacement_alert_days', default='30'
+            'insulin_pumps.replacement_alert_days', default='30'
         ))
         alert_threshold = today + timedelta(days=alert_days)
         for record in self:
@@ -283,14 +283,14 @@ class StockLot(models.Model):
             else:
                 record.replacement_alert = False
 
-    @api.depends('product_id', 'product_id.product_tmpl_id.is_glucose_pump_product')
-    def _compute_is_glucose_pump(self):
-        """Check if this lot belongs to a glucose pump product."""
+    @api.depends('product_id', 'product_id.product_tmpl_id.is_insulin_pump_product')
+    def _compute_is_insulin_pump(self):
+        """Check if this lot belongs to an insulin pump product."""
         for lot in self:
             if lot.product_id and lot.product_id.product_tmpl_id:
-                lot.is_glucose_pump = lot.product_id.product_tmpl_id.is_glucose_pump_product
+                lot.is_insulin_pump = lot.product_id.product_tmpl_id.is_insulin_pump_product
             else:
-                lot.is_glucose_pump = False
+                lot.is_insulin_pump = False
 
     @api.depends('product_id', 'product_id.product_tmpl_id.is_rma_product')
     def _compute_is_rma_device(self):
@@ -305,7 +305,7 @@ class StockLot(models.Model):
     def _check_single_device_per_type(self):
         """Ensure a patient cannot have more than one device of each type assigned."""
         for lot in self:
-            if not lot.is_glucose_pump or lot.pump_state != 'assigned':
+            if not lot.is_insulin_pump or lot.pump_state != 'assigned':
                 continue
             if not lot.assigned_patient_id or not lot.assignment_type:
                 continue
@@ -355,7 +355,7 @@ class StockLot(models.Model):
             # it means someone is trying to assign an RMA device directly
             if lot.assignment_type == 'primary' and lot.assigned_patient_id:
                 # Check if this device has never been assigned before (initial assignment)
-                assignment_count = self.env['glucose.assignment.log'].search_count([
+                assignment_count = self.env['insulin.assignment.log'].search_count([
                     ('equipment_id', '=', lot.id),
                 ])
                 # If there are no assignment logs yet, this is an initial assignment
@@ -394,7 +394,7 @@ class StockLot(models.Model):
         # Get alert threshold from settings (default 30 days)
         IrConfigParameter = self.env['ir.config_parameter'].sudo()
         alert_days = int(IrConfigParameter.get_param(
-            'glucose_pumps.replacement_alert_days', default='30'
+            'insulin_pumps.replacement_alert_days', default='30'
         ))
         
         # Get Patient Administrators group for activity assignment
@@ -409,7 +409,7 @@ class StockLot(models.Model):
         
         # Find devices approaching replacement date
         devices = self.search([
-            ('is_glucose_pump', '=', True),
+            ('is_insulin_pump', '=', True),
             ('pump_state', '=', 'assigned'),
             ('replacement_date', '!=', False),
             ('replacement_date', '<=', threshold_date),
@@ -463,3 +463,4 @@ class StockLot(models.Model):
                 'date_deadline': device.replacement_date,
                 'user_id': user_id,
             })
+

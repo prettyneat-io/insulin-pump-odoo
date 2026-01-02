@@ -174,19 +174,19 @@
                 Create your first patient!
             </p>
             <p>
-                Patients are contacts who are registered to receive glucose pump equipment.
+                Patients are contacts who are registered to receive insulin pump equipment.
             </p>
         </field>
     </record>
 
     <!-- Add Patients menu item -->
-    <menuitem id="menu_glucose_pumps_root"
-        name="Glucose Pumps"
+    <menuitem id="menu_insulin_pumps_root"
+        name="Insulin Pumps"
         sequence="50"/>
     
     <menuitem id="menu_patients"
         name="Patients"
-        parent="menu_glucose_pumps_root"
+        parent="menu_insulin_pumps_root"
         action="action_patients"
         sequence="20"/>
 </odoo>

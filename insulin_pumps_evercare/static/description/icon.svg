@@ -9,7 +9,7 @@
   <!-- Screen -->
   <rect x="30" y="25" width="40" height="20" rx="2" fill="#2D5A7B"/>
   
-  <!-- Screen text (glucose reading) -->
+  <!-- Screen text (Insulin reading) -->
   <text x="50" y="40" font-family="Arial" font-size="12" fill="#7FDBFF" text-anchor="middle">120</text>
   
   <!-- Buttons -->
@@ -24,3 +24,6 @@
   <circle cx="30" cy="85" r="5" fill="white"/>
   <circle cx="30" cy="85" r="2" fill="#875A7B"/>
 </svg>
+
+
+

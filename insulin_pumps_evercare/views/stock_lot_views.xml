@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Extend stock.lot form to show glucose pump fields -->
-    <record id="view_stock_lot_form_glucose_pump" model="ir.ui.view">
-        <field name="name">stock.lot.form.glucose.pump</field>
+    <!-- Extend stock.lot form to show insulin pump fields -->
+    <record id="view_stock_lot_form_insulin_pump" model="ir.ui.view">
+        <field name="name">stock.lot.form.insulin.pump</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
             <xpath expr="//sheet" position="before">
                 <header>
-                    <button name="action_unassign_device" string="Unassign Device" type="object" invisible="not is_glucose_pump or pump_state != 'assigned'"/>
-                    <button name="action_scrap_device" string="Scrap Device" type="object" invisible="not is_glucose_pump or pump_state == 'scrapped'"/>
-                    <button name="action_replace_device_wizard" string="Replace Device" type="object" invisible="not is_glucose_pump or pump_state != 'assigned' or assignment_type != 'primary'"/>
+                    <button name="action_unassign_device" string="Unassign Device" type="object" invisible="not is_insulin_pump or pump_state != 'assigned'"/>
+                    <button name="action_scrap_device" string="Scrap Device" type="object" invisible="not is_insulin_pump or pump_state == 'scrapped'"/>
+                    <button name="action_replace_device_wizard" string="Replace Device" type="object" invisible="not is_insulin_pump or pump_state != 'assigned' or assignment_type != 'primary'"/>
                 </header>
             </xpath>
             <xpath expr="//group[@name='main_group']" position="after">
-                <group string="Glucose Pump Info" invisible="not is_glucose_pump">
+                <group string="Insulin Pump Info" invisible="not is_insulin_pump">
                     <group>
-                        <field name="is_glucose_pump" invisible="1"/>
+                        <field name="is_insulin_pump" invisible="1"/>
                         <field name="is_rma_device" readonly="1"/>
                         <field name="pump_state"/>
                         <field name="assignment_type" invisible="pump_state != 'assigned'"/>
@@ -34,7 +34,7 @@
                 </div>
             </xpath>
             <xpath expr="//notebook" position="inside">
-                <page string="Linked Patient Information" name="linked_patient_info" invisible="not is_glucose_pump">
+                <page string="Linked Patient Information" name="linked_patient_info" invisible="not is_insulin_pump">
                     <field name="assignment_log_ids" readonly="1">
                         <list>
                             <field name="patient_internal_id" string="Patient ID"/>
@@ -49,12 +49,12 @@
         </field>
     </record>
 
-    <!-- Glucose Pump Equipment list view -->
-    <record id="view_stock_lot_tree_glucose_pumps" model="ir.ui.view">
-        <field name="name">stock.lot.tree.glucose.pumps</field>
+    <!-- Insulin Pump Equipment list view -->
+    <record id="view_stock_lot_tree_insulin_pumps" model="ir.ui.view">
+        <field name="name">stock.lot.tree.insulin.pumps</field>
         <field name="model">stock.lot</field>
         <field name="arch" type="xml">
-            <list string="Glucose Pump Equipment">
+            <list string="Insulin Pump Equipment">
                 <field name="patient_internal_id"/>
                 <field name="assigned_patient_id" string="Patient Name"/>
                 <field name="name" string="Equipment SN"/>
@@ -70,9 +70,9 @@
         </field>
     </record>
 
-    <!-- Glucose Pump Equipment Kanban View (Dashboard) -->
-    <record id="view_stock_lot_kanban_glucose_pumps" model="ir.ui.view">
-        <field name="name">stock.lot.kanban.glucose.pumps</field>
+    <!-- Insulin Pump Equipment Kanban View (Dashboard) -->
+    <record id="view_stock_lot_kanban_insulin_pumps" model="ir.ui.view">
+        <field name="name">stock.lot.kanban.insulin.pumps</field>
         <field name="model">stock.lot</field>
         <field name="arch" type="xml">
             <kanban default_group_by="pump_state" class="o_kanban_dashboard">
@@ -104,9 +104,9 @@
         </field>
     </record>
 
-    <!-- Glucose Pump Equipment search view -->
-    <record id="view_stock_lot_search_glucose_pumps" model="ir.ui.view">
-        <field name="name">stock.lot.search.glucose.pumps</field>
+    <!-- Insulin Pump Equipment search view -->
+    <record id="view_stock_lot_search_insulin_pumps" model="ir.ui.view">
+        <field name="name">stock.lot.search.insulin.pumps</field>
         <field name="model">stock.lot</field>
         <field name="arch" type="xml">
             <search string="Search Equipment">
@@ -130,22 +130,22 @@
     </record>
 
     <!-- Equipment menu action -->
-    <record id="action_glucose_pump_equipment" model="ir.actions.act_window">
+    <record id="action_insulin_pump_equipment" model="ir.actions.act_window">
         <field name="name">Equipment</field>
         <field name="res_model">stock.lot</field>
         <field name="view_mode">kanban,list,form</field>
-        <field name="domain">[('is_glucose_pump', '=', True)]</field>
+        <field name="domain">[('is_insulin_pump', '=', True)]</field>
         <field name="context">{'search_default_group_state': 1, 'display_complete': True}</field>
         <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_stock_lot_kanban_glucose_pumps')}),
-            (0, 0, {'view_mode': 'list', 'view_id': ref('view_stock_lot_tree_glucose_pumps')})]"/>
-        <field name="search_view_id" ref="view_stock_lot_search_glucose_pumps"/>
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_stock_lot_kanban_insulin_pumps')}),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_stock_lot_tree_insulin_pumps')})]"/>
+        <field name="search_view_id" ref="view_stock_lot_search_insulin_pumps"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                No glucose pump equipment found.
+                No insulin pump equipment found.
             </p>
             <p>
-                Equipment is created by adding serial numbers to glucose pump products in inventory.
+                Equipment is created by adding serial numbers to insulin pump products in inventory.
             </p>
         </field>
     </record>
@@ -188,7 +188,7 @@
     <!-- Add Equipment menu item -->
     <menuitem id="menu_equipment"
         name="Equipment"
-        parent="menu_glucose_pumps_root"
-        action="action_glucose_pump_equipment"
+        parent="menu_insulin_pumps_root"
+        action="action_insulin_pump_equipment"
         sequence="10"/>
 </odoo>

@@ -2,9 +2,9 @@ from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
 
-class GlucoseReplaceDeviceWizard(models.TransientModel):
-    _name = 'glucose.replace.device.wizard'
-    _description = 'Replace Glucose Pump Device'
+class InsulinReplaceDeviceWizard(models.TransientModel):
+    _name = 'insulin.replace.device.wizard'
+    _description = 'Replace Insulin Pump Device'
 
     # Current device information (display only)
     old_device_id = fields.Many2one(
@@ -85,8 +85,8 @@ class GlucoseReplaceDeviceWizard(models.TransientModel):
         if not patient:
             raise UserError("Cannot replace device: No patient is assigned to the current device.")
         
-        if not old_device.is_glucose_pump:
-            raise UserError("The current device is not a glucose pump device.")
+        if not old_device.is_insulin_pump:
+            raise UserError("The current device is not an insulin pump device.")
         
         # Validate that old device is a primary device
         if old_device.assignment_type != 'primary':
@@ -111,7 +111,7 @@ class GlucoseReplaceDeviceWizard(models.TransientModel):
         notes_text = f" Notes: {self.replacement_notes}" if self.replacement_notes else ""
         
         # 1. Set replacement date on old device assignment log
-        old_log = self.env['glucose.assignment.log'].search([
+        old_log = self.env['insulin.assignment.log'].search([
             ('patient_id', '=', patient.id),
             ('equipment_id', '=', old_device.id),
             ('assignment_type', '=', 'primary'),
@@ -192,7 +192,7 @@ class GlucoseReplaceDeviceWizard(models.TransientModel):
         """
         # Get return location from settings
         return_location_id = int(self.env['ir.config_parameter'].sudo().get_param(
-            'glucose_pumps.return_location_id', default=0
+            'insulin_pumps.return_location_id', default=0
         ))
         
         if not return_location_id:
@@ -233,3 +233,6 @@ class GlucoseReplaceDeviceWizard(models.TransientModel):
                 move_line.quantity = 1
             
             move._action_done()
+
+
+

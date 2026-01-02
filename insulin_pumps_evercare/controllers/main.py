@@ -11,7 +11,7 @@ class HolidayPumpController(http.Controller):
             sn = post.get('main_pump_serial', '').strip()
             lot = request.env['stock.lot'].sudo().search([
                 ('name', '=ilike', sn),
-                ('is_glucose_pump', '=', True),
+                ('is_insulin_pump', '=', True),
                 ('pump_state', '=', 'assigned')
             ], limit=1)
             
@@ -35,7 +35,7 @@ class HolidayPumpController(http.Controller):
                 'status': 'pending',
             }
             
-            request_record = request.env['glucose.holiday.pump.request'].sudo().create(vals)
+            request_record = request.env['insulin.holiday.pump.request'].sudo().create(vals)
             
             # Trigger email notification (Logic to be implemented in the model or here)
             # For now, we just show the success page
@@ -44,3 +44,4 @@ class HolidayPumpController(http.Controller):
             })
 
         return request.render("insulin_pumps_evercare.holiday_pump_request_template")
+

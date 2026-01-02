@@ -2,9 +2,9 @@ from odoo import fields, models
 
 
 class TrainingLocation(models.Model):
-    """Training locations for glucose pump patients."""
-    _name = 'glucose.training.location'
-    _description = 'Glucose Pump Training Location'
+    """Training locations for insulin pump patients."""
+    _name = 'insulin.training.location'
+    _description = 'Insulin Pump Training Location'
 
     name = fields.Char(
         string='Name',
@@ -22,3 +22,4 @@ class TrainingLocation(models.Model):
         string='Patients',
         domain="[('is_patient', '=', True)]"
     )
+

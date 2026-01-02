@@ -8,7 +8,7 @@ class ResPartner(models.Model):
     is_patient = fields.Boolean(
         string='Is Patient',
         default=False,
-        help='Check if this contact is a glucose pump patient'
+        help='Check if this contact is an insulin pump patient'
     )
     
     # Patient Information fields
@@ -42,12 +42,12 @@ class ResPartner(models.Model):
     primary_device_id = fields.Many2one(
         'stock.lot',
         string='Current Primary Device',
-        domain="[('is_glucose_pump', '=', True), ('pump_state', '=', 'available')]"
+        domain="[('is_insulin_pump', '=', True), ('pump_state', '=', 'available')]"
     )
     holiday_pump_id = fields.Many2one(
         'stock.lot',
         string='Current Holiday Pump',
-        domain="[('is_glucose_pump', '=', True), ('pump_state', '=', 'available')]"
+        domain="[('is_insulin_pump', '=', True), ('pump_state', '=', 'available')]"
     )
     holiday_pump_return_date = fields.Date(
         string='Holiday Pump Return Date'
@@ -55,20 +55,20 @@ class ResPartner(models.Model):
     
     # Training location
     training_location_id = fields.Many2one(
-        'glucose.training.location',
+        'insulin.training.location',
         string='Training Location'
     )
     
     # Assignment history
     assignment_log_ids = fields.One2many(
-        'glucose.assignment.log',
+        'insulin.assignment.log',
         'patient_id',
         string='Assignment History'
     )
     
     # Consumables
     consumables_allocation_ids = fields.One2many(
-        'glucose.consumables.allocation',
+        'insulin.consumables.allocation',
         'patient_id',
         string='Consumables Allocations'
     )
@@ -98,14 +98,14 @@ class ResPartner(models.Model):
         year = today.year
         
         # Check if allocation already exists
-        existing = self.env['glucose.consumables.allocation'].search([
+        existing = self.env['insulin.consumables.allocation'].search([
             ('patient_id', '=', self.id),
             ('month', '=', month),
             ('year', '=', year)
         ], limit=1)
         
         if not existing:
-            self.env['glucose.consumables.allocation'].create({
+            self.env['insulin.consumables.allocation'].create({
                 'patient_id': self.id,
                 'month': month,
                 'year': year,
@@ -158,7 +158,7 @@ class ResPartner(models.Model):
                 
                 if 'primary_device_id' in vals and record.primary_device_id:
                     # Check if this device already has an active assignment log for this patient
-                    existing_log = self.env['glucose.assignment.log'].search([
+                    existing_log = self.env['insulin.assignment.log'].search([
                         ('patient_id', '=', record.id),
                         ('equipment_id', '=', record.primary_device_id.id),
                         ('assignment_type', '=', 'primary'),
@@ -168,7 +168,7 @@ class ResPartner(models.Model):
                         record._assign_device(record.primary_device_id, 'primary')
                 
                 if 'holiday_pump_id' in vals and record.holiday_pump_id:
-                    existing_log = self.env['glucose.assignment.log'].search([
+                    existing_log = self.env['insulin.assignment.log'].search([
                         ('patient_id', '=', record.id),
                         ('equipment_id', '=', record.holiday_pump_id.id),
                         ('assignment_type', '=', 'holiday_pump'),
@@ -264,7 +264,7 @@ class ResPartner(models.Model):
             # Check primary device
             if partner.primary_device_id and partner.primary_device_id.is_rma_device:
                 # Check if this device already has assignment logs (meaning it was properly assigned via replacement)
-                existing_logs = self.env['glucose.assignment.log'].search([
+                existing_logs = self.env['insulin.assignment.log'].search([
                     ('equipment_id', '=', partner.primary_device_id.id),
                     ('patient_id', '=', partner.id),
                 ])
@@ -281,3 +281,4 @@ class ResPartner(models.Model):
                     f"RMA device '{partner.holiday_pump_id.name}' cannot be assigned as a holiday pump. "
                     "RMA devices can only be used as replacements for malfunctioning primary devices."
                 )
+
