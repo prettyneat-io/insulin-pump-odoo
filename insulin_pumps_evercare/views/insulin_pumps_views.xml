@@ -274,6 +274,21 @@
         action="action_training_locations"
         sequence="10"/>
 
+    <!-- Extend product.template form to add insulin pump settings -->
+    <record id="view_product_template_form_insulin_pump" model="ir.ui.view">
+        <field name="name">product.template.form.insulin.pump</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock.view_template_property_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='group_lots_and_weight']" position="after">
+                <group string="Insulin Pump Settings" name="insulin_pump_settings">
+                    <field name="is_insulin_pump_product"/>
+                    <field name="is_rma_product" invisible="not is_insulin_pump_product"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
     <!-- Settings action -->
     <record id="action_insulin_pumps_settings" model="ir.actions.act_window">
         <field name="name">Settings</field>

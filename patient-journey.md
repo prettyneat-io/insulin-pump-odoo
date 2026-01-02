@@ -5,8 +5,8 @@ This single journey is designed to touch every feature described in `spec.md`, u
 ## Cast (Roles)
 
 - **Patient Administrators** (internal Odoo users; e.g., Jonathan, Denise)
-  - Full access to the Glucose Pump app
-  - Manage Patients menu under Glucose Pumps
+  - Full access to the Insulin Pump app
+  - Manage Patients menu under Insulin Pumps
   - Can assign/unassign/scrap/replace devices
   - Receive replacement-date alert activities
 - **Patient** (public website visitor)
@@ -18,12 +18,9 @@ This single journey is designed to touch every feature described in `spec.md`, u
 
 > Goal: Ensure module configuration and constraints are exercised.
 
-1. **Open**: Glucose Pump App → Configuration → **Settings**
+### 1. Global Settings
+1. **Open**: Insulin Pumps App → Configuration → **Settings**
 2. Configure:
-   - **Allowed pump products** (devices searchable/assignable in the app):
-     - `Tandem t:slim X2 Pump` (standard product)
-   - **RMA replacement product**:
-     - `Tandem t:slim X2 Pump (RMA)`
    - **Returns location** (Internal Location):
      - Default to `WH/Evercare Medical/Insulin Pumps`
    - **Replacement date alert threshold**:
@@ -34,6 +31,19 @@ This single journey is designed to touch every feature described in `spec.md`, u
    - **Helpdesk email configuration**:
      - Incoming/outgoing: `tandemsupport@evercaremedical.eu`
 
+### 2. Product Configuration
+> Note: Allowed pump products and RMA products are configured on individual Product records.
+
+1. **Open**: Inventory → Products → **Products**
+2. For the standard pump (e.g., `Tandem t:slim X2 Pump`):
+   - Open the **Inventory** tab.
+   - Check **Insulin Pump Product**.
+   - Ensure **RMA Replacement Product** is UNCHECKED.
+3. For the RMA pump (e.g., `Tandem t:slim X2 Pump (RMA)`):
+   - Open the **Inventory** tab.
+   - Check **Insulin Pump Product**.
+   - Check **RMA Replacement Product**.
+
 Expected results:
 - Standard devices can be assigned initially.
 - RMA devices cannot be used except via the Replace Device workflow.
@@ -41,7 +51,7 @@ Expected results:
 
 ## Training Locations Setup (Admin)
 
-1. **Open**: Glucose Pump App → Configuration → **Training Locations**
+1. **Open**: Insulin Pumps App → Configuration → **Training Locations**
 2. Create at least one active record:
    - Name: `Mosta Clinic`
 
@@ -57,7 +67,7 @@ Create the following Equipment/Lot records (Inventory lot/serial records, extend
 
 - **Standard primary device**
   - SN: `SN-PRI-0007`
-  - Product: `Tandem t:slim X2 Pump`
+  - Product: `Tandem t:slim X2 Pump` (Ensure "Insulin Pump Product" is checked on product)
   - State: `Available` (default)
 - **Standard holiday pump**
   - SN: `SN-HOL-0012`
@@ -65,7 +75,7 @@ Create the following Equipment/Lot records (Inventory lot/serial records, extend
   - State: `Available` (default)
 - **RMA replacement device**
   - SN: `SN-RMA-0099`
-  - Product: `Tandem t:slim X2 Pump (RMA)`
+  - Product: `Tandem t:slim X2 Pump (RMA)` (Ensure "RMA Replacement Product" is checked on product)
   - State: `Available` (default)
 
 On each Equipment record:
@@ -77,7 +87,7 @@ On each Equipment record:
 
 > This step touches the Create Patient Modal, patient-only constraints, patient internal ID sequence, initial assignment logs, and chatter.
 
-1. **Open**: Glucose Pump App → **Patients** (Patients Index Page)
+1. **Open**: Insulin Pumps App → **Patients** (Patients Index Page)
 2. Click **Create Patient**
 3. Enter patient contact information (example):
    - Name: `Alex Camilleri`
@@ -116,7 +126,7 @@ System effects:
 
 > This step touches the Patients menu and UI rules.
 
-1. **Open**: Glucose Pumps → **Patients**
+1. **Open**: Insulin Pumps → **Patients**
 2. Confirm:
    - Only contacts with `IsPatient = true` are listed.
    - Card view shows **Patient Internal ID**.
@@ -127,7 +137,7 @@ System effects:
 
 > This step touches the dashboard counts, default Equipment view, Patients tab navigation, and row click behavior.
 
-1. **Open**: Glucose Pump App → **Equipment**
+1. **Open**: Insulin Pumps App → **Equipment**
 2. Confirm header cards display counts for:
    - Assigned
    - Unassigned
@@ -160,7 +170,7 @@ Repeat quick verification for `SN-HOL-0012` (assignment type shown as holiday pu
 
 > This step touches the Consumables page, thresholds, warnings, and “no auto sales orders”.
 
-1. **Open**: Glucose Pump App → **Consumables** (Consumables Tracking Page)
+1. **Open**: Insulin Pumps App → **Consumables** (Consumables Tracking Page)
 2. Allocate consumables for Alex for the current month/year:
    - Quantity Allocated: `10` (uses global default unless overridden)
    - Quantity Used: `9`
@@ -219,7 +229,7 @@ System effects:
 
 Scenario: Alex returns from travel early; holiday pump is no longer needed.
 
-1. **Open**: Glucose Pump App → **Equipment**
+1. **Open**: Insulin Pumps App → **Equipment**
 2. Select the row for `SN-HOL-0012` (holiday pump) in the **List View**.
 3. Click **Actions** → **Unassign Device**
 
@@ -237,7 +247,7 @@ Expected system effects:
 
 Scenario: The primary device malfunctions.
 
-1. **Open**: Glucose Pump App → **Equipment**
+1. **Open**: Insulin Pumps App → **Equipment**
 2. Select the row for primary device `SN-PRI-0007`
 3. Action → **Replace Device**
 4. In the modal, confirm it displays current device info:
@@ -274,7 +284,7 @@ Constraint coverage:
 
 Scenario: The old device `SN-PRI-0007` is diagnosed as non-repairable.
 
-1. **Open**: Glucose Pump App → **Equipment**
+1. **Open**: Insulin Pumps App → **Equipment**
 2. Select the row for `SN-PRI-0007` (now available) in the **List View**.
 3. Click **Actions** → **Scrap Device**
 
